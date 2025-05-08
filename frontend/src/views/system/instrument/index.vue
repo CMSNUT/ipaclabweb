@@ -158,6 +158,7 @@ function getList() {
     instrumentList.value = response.rows;
     total.value = response.total;
     loading.value = false;
+    console.log('仪器数据加载成功:', instrumentList.value); // 调试输出
   });
 }
 

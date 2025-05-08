@@ -28,6 +28,7 @@ from utils.common_util import worship
 from utils.log_util import logger
 
 from module_admin.controller.instrument_controller import instrumentController
+from module_admin.controller.instrument_tutorial_controller import instrument_tutorialController
 
 
 # 生命周期事件
@@ -83,6 +84,7 @@ controller_list = [
     {'router': genController, 'tags': ['代码生成']},
 
     {'router': instrumentController, 'tags': ['系统管理-仪器管理']},
+    {'router': instrument_tutorialController, 'tags': ['系统管理-仪器教程管理']},
 ]
 
 for controller in controller_list:
