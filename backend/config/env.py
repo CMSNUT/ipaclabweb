@@ -14,10 +14,10 @@ class AppSettings(BaseSettings):
     """
 
     app_env: str = 'dev'
-    app_name: str = 'RuoYi-FasAPI'
+    app_name: str = 'IPACLab'
     app_root_path: str = '/dev-api'
     app_host: str = '0.0.0.0'
-    app_port: int = 9099
+    app_port: int = 8000
     app_version: str = '1.0.0'
     app_reload: bool = True
     app_ip_location_query: bool = True
@@ -43,12 +43,12 @@ class DataBaseSettings(BaseSettings):
     db_type: Literal['mysql', 'postgresql'] = 'mysql'
     db_host: str = '127.0.0.1'
     db_port: int = 3306
-    db_username: str = 'ruoyi'
-    db_password: str = 'mysqlroot'
-    db_database: str = 'fastapi'
+    db_username: str = 'aikemi'
+    db_password: str = 'snut3426'
+    db_database: str = 'ipac'
     db_echo: bool = True
-    db_max_overflow: int = 10
-    db_pool_size: int = 50
+    db_max_overflow: int = 5
+    db_pool_size: int = 100
     db_pool_recycle: int = 3600
     db_pool_timeout: int = 30
 
@@ -77,7 +77,7 @@ class GenSettings:
     代码生成配置
     """
 
-    author = 'insistence'
+    author = 'admin'
     package_name = 'module_admin.system'
     auto_remove_pre = False
     table_prefix = 'sys_'
@@ -115,6 +115,7 @@ class UploadSettings:
         'html',
         'htm',
         'txt',
+        'md',
         # 压缩文件
         'rar',
         'zip',
