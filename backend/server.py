@@ -27,6 +27,8 @@ from sub_applications.handle import handle_sub_applications
 from utils.common_util import worship
 from utils.log_util import logger
 
+from module_admin.controller.instrument_controller import instrumentController
+
 
 # 生命周期事件
 @asynccontextmanager
@@ -79,6 +81,8 @@ controller_list = [
     {'router': cacheController, 'tags': ['系统监控-缓存监控']},
     {'router': commonController, 'tags': ['通用模块']},
     {'router': genController, 'tags': ['代码生成']},
+
+    {'router': instrumentController, 'tags': ['系统管理-仪器管理']},
 ]
 
 for controller in controller_list:
