@@ -83,8 +83,8 @@ const averageTotal = computed(() => {
 const checkboxString = computed(() => {
     return checkboxList.value.join(',')
 })
-watch(() => props.cron.year, value => changeRadioValue(value))
-watch([radioValue, cycleTotal, averageTotal, checkboxString], () => onRadioChange())
+watchEffect(() => props.cron.year, value => changeRadioValue(value))
+watchEffect([radioValue, cycleTotal, averageTotal, checkboxString], () => onRadioChange())
 function changeRadioValue(value) {
     if (value === '') {
         radioValue.value = 1

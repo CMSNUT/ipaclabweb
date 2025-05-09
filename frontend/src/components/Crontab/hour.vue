@@ -74,8 +74,8 @@ const averageTotal = computed(() => {
 const checkboxString = computed(() => {
     return checkboxList.value.join(',')
 })
-watch(() => props.cron.hour, value => changeRadioValue(value))
-watch([radioValue, cycleTotal, averageTotal, checkboxString], () => onRadioChange())
+watchEffect(() => props.cron.hour, value => changeRadioValue(value))
+watchEffect([radioValue, cycleTotal, averageTotal, checkboxString], () => onRadioChange())
 function changeRadioValue(value) {
     if (props.cron.min === '*') {
         emit('update', 'min', '0', 'hour');

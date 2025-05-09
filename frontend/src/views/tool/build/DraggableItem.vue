@@ -59,7 +59,7 @@ function getComponentData() {
   }
 }
 
-watch(() => props.activeId, (val) => {
+watchEffect(() => props.activeId, (val) => {
   className.value = (props.element.layout === 'rowFormItem' ? 'drawing-row-item' : 'drawing-item') + (val === props.element.formId ? ' active-from-item' : '')
   if (props.formConf.unFocusedComponentBorder) {
     className.value += ' unfocus-bordered'

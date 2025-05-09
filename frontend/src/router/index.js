@@ -66,7 +66,7 @@ export const constantRoutes = [
         path: '/index',
         component: () => import('@/views/dashboard/index'),
         name: 'Index',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
+        meta: { title: '首页', icon: 'dashboard' , affix: true}
       }
     ]
   },
@@ -81,6 +81,57 @@ export const constantRoutes = [
         component: () => import('@/views/system/user/profile/index'),
         name: 'Profile',
         meta: { title: '个人中心', icon: 'user' }
+      }
+    ]
+  },
+
+  // 学习资源路由
+  {
+    path: '/resource',
+    component: Layout,
+    name: 'Resource',
+    hidden: false,
+    redirect: 'noRedirect',
+    meta: {title: '学习资源', icon: 'education'},
+    alwaysShow: true,
+    children: [
+      {
+        path: 'instrument',
+        component: () => import('@/views/resource/instrument/index'),
+        name: 'Instrument',
+        meta: { title: '仪器设备', icon: '', activeMenu: '/resource/instrument', breadcrumb: true}
+      },
+      // 将三级路由改为二级路由，否则不能正确显示页面
+      {
+        path: 'instrument/:deviceId(\\d+)', // 动态路由参数，匹配数字ID
+        component: () => import('@/views/resource/instrument/detail'),
+        hidden: true,
+        name: 'InstrumentDetail',
+        meta: { title: '仪器详情', icon: '', activeMenu: '/resource/instrument', breadcrumb: false}
+      },
+      {
+        path: 'program',
+        component: () => import('@/views/resource/program/index'),
+        name: 'Program',
+        meta: { title: '开源程序', icon: '' }
+      },
+      {
+        path: 'dataset',
+        component: () => import('@/views/resource/dataset/index'),
+        name: 'Dataset',
+        meta: { title: '公共数据', icon: '' }
+      },
+      {
+        path: 'tutorial',
+        component: () => import('@/views/resource/tutorial/index'),
+        name: 'Tutorial',
+        meta: { title: '教程合集', icon: '' }
+      },
+      {
+        path: 'literature',
+        component: () => import('@/views/resource/literature/index'),
+        name: 'Literature',
+        meta: { title: '文献分析', icon: '' }
       }
     ]
   }

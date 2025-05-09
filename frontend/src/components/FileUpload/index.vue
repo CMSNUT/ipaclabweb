@@ -83,7 +83,7 @@ const showTip = computed(
   () => props.isShowTip && (props.fileType || props.fileSize)
 );
 
-watch(() => props.modelValue, val => {
+watchEffect(() => props.modelValue, val => {
   if (val) {
     let temp = 1;
     // 首先将值转为数组

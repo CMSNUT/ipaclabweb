@@ -369,7 +369,7 @@ const filterNode = (value, data) => {
   return data.label.indexOf(value) !== -1;
 };
 /** 根据名称筛选部门树 */
-watch(deptName, (val) => {
+watchEffect(deptName, (val) => {
   proxy.$refs["deptTreeRef"].filter(val);
 });
 /** 查询用户列表 */

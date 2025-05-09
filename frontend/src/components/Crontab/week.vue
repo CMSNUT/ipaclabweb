@@ -123,8 +123,8 @@ const weekdayTotal = computed(() => {
 const checkboxString = computed(() => {
     return checkboxList.value.join(',')
 })
-watch(() => props.cron.week, value => changeRadioValue(value))
-watch([radioValue, cycleTotal, averageTotal, weekdayTotal, checkboxString], () => onRadioChange())
+watchEffect(() => props.cron.week, value => changeRadioValue(value))
+watchEffect([radioValue, cycleTotal, averageTotal, weekdayTotal, checkboxString], () => onRadioChange())
 function changeRadioValue(value) {
     if (value === "*") {
         radioValue.value = 1
