@@ -36,7 +36,9 @@ conda create -n ipac-env python=3.9 -y
 conda activate ipac-env
 pip install -r xxx\\requirements.txt
 ```
-# 增加模块1: 仪器管理
+# 增加模块
+## 生成代码
+- 在前端 `代码生成` 菜单项，点击`创建`，然后将建表代码复制到对话框中
 ```bash
 -- ----------------------------
 -- 1、仪器信息表
@@ -74,12 +76,87 @@ create table sys_device_tutorial (
   primary key (tutorial_id)
 ) engine=innodb auto_increment=1 comment = '仪器教程表';
 ```
-## 仪器教程的前端操作修改
-- 参考 system/user/index.vue
-```bash
+## 代码修改和完善
+- 点击 `修改`，修改`字段信息` 和 `生成信息`
 
+## 代码应用
+- 点击`生成`，下载代码
+- 解压后，复制 `backend` 文件夹 到 项目根目录
+- 复制 `frontend` 文件夹中的 `api` 和 `views` 文件夹，到项目的`frontend\src`文件夹中
+- 在 项目`backend\server.py` 文件中，添加 新增模块的 控制器
+- 使用mysql命令，添加新增模块的菜单信息
+
+# 关键点备忘
+## 代码生成
+[X] 使用`代码生成`数据表时，字典需要先生成，且字段显示设为下拉菜单
+[X] 选择框，显示都可以设为下拉菜单
+[X] 图片地址，显示设为`图片上传`
+[X] 文件地址，显示设为`文件上传`
+[X] 富文本，字段类型设为 text，显示设为 `富文本`
+
+## 前端代码
+### 外键ID 显示为名称
+- `script`部分
+```JavaScript
+import { listDevice } from "@/api/system/device"; // 新增：导入仪器API
+
+const deviceList = ref([]); // 新增：仪器字典状态
+
+
+/** 新增: 自定义函数，根据设备ID获取设备名称 */
+const getDeviceName = (deviceId) => {
+  if (!deviceId || deviceList.value.length === 0) return '-';
+  const device = deviceList.value.find(item => item.value === deviceId);
+  return device ? device.label : `未知仪器(${deviceId})`;
+};
+
+// 新增：加载仪器列表
+const getDeviceList = () => {
+  listDevice().then(response => {
+  deviceList.value = response.rows.map(item => ({
+    label: item.deviceName,
+    value: item.deviceId    
+  }));
+})
+};
+
+getDeviceList(); // 新增
+```
+- 搜索部分
+```vue
+<el-form-item label="仪器名称" prop="deviceId">
+  <el-select v-model="queryParams.deviceId" placeholder="请选择仪器" clearable style="width: 240px">
+    <el-option
+      v-for="item in deviceList"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value"
+    />
+  </el-select>
+</el-form-item>
+```
+- 表格部分
+```vue
+<!-- 修改：添加自定义函数显示仪器名称 -->
+      
+<el-table-column label="仪器名称" align="center" prop="deviceId">
+  <template #default="scope">
+    {{ getDeviceName(scope.row.deviceId) }}
+  </template>
+</el-table-column>
+```
+- 修改或新增对话框部分
+```vue
+<el-form-item v-if="renderField(true, true)" label="仪器名称" prop="deviceId">
+  <el-select v-model="form.deviceId" placeholder="请选择仪器">
+    <el-option
+      v-for="item in deviceList"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value"
+    />
+  </el-select>
+</el-form-item>
 ```
 
-```bash
-```
-
+ 

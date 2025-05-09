@@ -27,8 +27,8 @@ from sub_applications.handle import handle_sub_applications
 from utils.common_util import worship
 from utils.log_util import logger
 
-# from module_admin.controller.instrument_controller import instrumentController
-# from module_admin.controller.instrument_tutorial_controller import instrument_tutorialController
+from module_admin.controller.device_controller import deviceController
+from module_admin.controller.device_tutorial_controller import device_tutorialController
 
 
 # 生命周期事件
@@ -83,8 +83,8 @@ controller_list = [
     {'router': commonController, 'tags': ['通用模块']},
     {'router': genController, 'tags': ['代码生成']},
 
-    # {'router': instrumentController, 'tags': ['系统管理-仪器管理']},
-    # {'router': instrument_tutorialController, 'tags': ['系统管理-仪器教程管理']},
+    {'router': deviceController, 'tags': ['系统管理-仪器管理']},
+    {'router': device_tutorialController, 'tags': ['系统管理-仪器教程管理']},
 ]
 
 for controller in controller_list:
