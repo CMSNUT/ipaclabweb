@@ -2,6 +2,11 @@
   <div class="app-container">
     <!-- 搜索表单 -->
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+      <!-- <el-form-item label="仪器ID" prop="deviceId">
+        <el-select v-model="queryParams.deviceId" placeholder="请选择仪器ID" clearable style="width: 240px">
+          <el-option label="请选择字典生成" value="" />
+        </el-select>
+      </el-form-item> -->
       <el-form-item label="仪器名称" prop="deviceId">
         <el-select v-model="queryParams.deviceId" placeholder="请选择仪器" clearable style="width: 240px">
           <el-option
@@ -116,53 +121,6 @@
       v-model:limit="queryParams.pageSize"
       @pagination="getList"
     />
-
-    <!-- 添加或修改仪器教程对话框 -->
-    <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="device_tutorialRef" :model="form" :rules="rules" label-width="80px">
-      <!-- <el-form-item v-if="renderField(true, true)" label="仪器ID" prop="deviceId">
-        <el-select v-model="form.deviceId" placeholder="请选择仪器ID">
-          <el-option label="请选择字典生成" value="" />
-        </el-select>
-      </el-form-item> -->
-      <el-form-item v-if="renderField(true, true)" label="仪器名称" prop="deviceId">
-          <el-select v-model="form.deviceId" placeholder="请选择仪器">
-            <el-option
-              v-for="item in deviceList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-      <el-form-item v-if="renderField(true, true)" label="教程标题" prop="tutorialTitle">
-        <el-input v-model="form.tutorialTitle" placeholder="请输入教程标题" />
-      </el-form-item>
-      <el-form-item v-if="renderField(true, true)" label="教程类别" prop="tutorialCategory">
-        <el-select v-model="form.tutorialCategory" placeholder="请选择教程类别">
-          <el-option
-            v-for="dict in sys_tutorial_category"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item v-if="renderField(true, true)" label="本地文件" prop="tutorialFile">
-        <file-upload v-model="form.tutorialFile"/>
-      </el-form-item>
-      <el-form-item v-if="renderField(true, true)" label="外部链接" prop="tutorialUrl">
-        <el-input v-model="form.tutorialUrl" placeholder="请输入外部链接" />
-      </el-form-item>
-
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button type="primary" @click="submitForm">确 定</el-button>
-          <el-button @click="cancel">取 消</el-button>
-        </div>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
@@ -256,7 +214,6 @@ function reset() {
 /** 搜索按钮操作 */
 function handleQuery() {
   queryParams.value.pageNum = 1;
-  
   getList();
 }
 

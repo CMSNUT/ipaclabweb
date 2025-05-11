@@ -159,4 +159,154 @@ getDeviceList(); // 新增
 </el-form-item>
 ```
 
- 
+# 路由设置
+- 以`仪器设备`及`仪器详情`为例
+## `query` 模式
+- `resource/instrument/index.vue`
+```vue
+<!-- - `resource/instrument/index.vue` -->
+<el-table-column label="仪器名称" align="center" :show-overflow-tooltip="true">
+  <template #default="scope">
+    <router-link :to="{ name: 'InstrumentDetail', query: {id: scope.row.deviceId }}" class="link-type">
+      <span>{{ scope.row.deviceName }}</span>
+    </router-link>
+  </template>
+</el-table-column>
+```
+- `resource/instrument/detail.vue`
+```JavaScript
+// `resource/instrument/detail.vue` 
+......
+const deviceId = route.query.id;
+......
+```
+
+- `router/index.js`
+```JavaScript
+// 动态路由，基于用户权限动态去加载
+......
+{
+  path: '/resource',
+  component: Layout,
+  hidden: true,
+  // roles: ['admin','common'],
+  permissions: ['system:device:list','system:device:query'],
+  children: [
+    {
+      path: '/resource/instrument/detail', // 注意这里不需要动态参数
+      component: () => import('@/views/resource/instrument/detail'),
+      name: 'InstrumentDetail',
+      roles: ['admin','common'],
+      permissions: ['system:device:list','system:device:query'],
+      meta: { title: '仪器详情' }
+    }
+  ]
+}
+
+......
+```
+
+## `params`模式
+- `resource/instrument/index.vue`
+```vue
+<!-- - `resource/instrument/index.vue` -->
+<el-table-column label="仪器名称" align="center" :show-overflow-tooltip="true">
+  <template #default="scope">
+    <router-link :to="'/resource/instrument/' + scope.row.deviceId" class="link-type">   
+      <span>{{ scope.row.deviceName }}</span>
+    </router-link>
+  </template>
+</el-table-column>
+```
+
+- `resource/instrument/detail.vue`
+```JavaScript
+// `resource/instrument/detail.vue` 
+......
+const deviceId = route.params.deviceId;
+......
+```
+- `router/index.js`
+```JavaScript
+// 动态路由，基于用户权限动态去加载
+{
+  path: '/resource',
+  component: Layout,
+  hidden: true,
+  roles: ['admin','common'],
+  permissions: ['system:device:list','system:device:query'],
+  children: [
+    {
+      path: 'instrument/:deviceId(\\d+)',
+      component: () => import('@/views/resource/instrument/detail'),
+      name: 'InstrumentDetail',
+      meta: { title: '仪器设备详情', activeMenu: '/resource/instrument' }
+    }
+  ]
+}
+```
+
+## 系统管理中菜单设置(`params`模式)
+|菜单名称|路由名称|路由地址|组件路径|权限字符|菜单显示|
+|----|----|----|----|----|----|
+|仪器设备|`Instrument`|`instrument`|`resource/instrument/index`|`system:device:list`|显示|
+|仪器详情|`InstrumentDetail`|`instrument`|`resource/instrument/detail`|`system:device:query`|不显示|
+|仪器教程|InstrumentTutorial||||不显示|
+|仪器教程详情|InstrumentTutorialDetail||||不显示|
+
+## 系统管理中权限设置
+- 授权非管理员`学习资源`下所有菜单的权限
+
+
+# 其他表设计
+
+## 标签表
+```bash
+-- ----------------------------
+-- 1、标签表
+-- ----------------------------
+
+
+```
+
+## 算法程序表
+```bash
+-- ----------------------------
+-- 1、算法程序表
+-- ----------------------------
+create table sys_algo (
+  algo_id           int(8)      not null auto_increment    comment '算法ID',
+  algo_name         varchar(30) not null                   comment '算法名称',
+  algo_lang         char(1)     default '0'                comment '编程语言',
+  algo_desc         mediumtex   not null                   comment '算法描述',
+  algo_by         varchar(30)   default ''                 comment '创建者',
+  algo_time       datetime                                   comment '创建时间',
+  algo_by         varchar(30)   default ''                 comment '更新者',
+  algo_time       datetime                                   comment '更新时间',
+  primary key (algo_id)
+) engine=innodb auto_increment=1 comment = '算法程序表';
+```
+
+```bash
+-- ----------------------------
+-- 2、算法教程表
+-- ----------------------------
+create table sys_algo_tutorial (
+  tutorial_id           int(4)      not null auto_increment    comment '教程ID',
+  algo_id         int(4)      default null    comment '算法ID',
+  tutorial_title         varchar(30)     not null   comment '教程标题',
+  tutorial_content       mediumtex   not null   comment '教程内容',
+  create_by         varchar(30)     default ''                 comment '创建者',
+  create_time       datetime                                   comment '创建时间',
+  update_by         varchar(30)     default ''                 comment '更新者',
+  update_time       datetime                                   comment '更新时间',
+  primary key (tutorial_id)
+) engine=innodb auto_increment=1 comment = '算法教程表';
+```
+
+
+
+## 待完善
+- **移动端界面美化**
+- **原位查看文件**
+

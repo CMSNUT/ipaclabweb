@@ -173,6 +173,7 @@
               <el-option label="word" value=".doc,.docx" />
               <el-option label="pdf" value=".pdf" />
               <el-option label="txt" value=".txt" />
+              <el-option label="md" value=".md" />
             </el-select>
           </el-form-item>
           <el-form-item v-if="activeData.fileSize !== undefined" label="文件大小">
