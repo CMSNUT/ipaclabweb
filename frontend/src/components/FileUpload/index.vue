@@ -57,7 +57,7 @@ const props = defineProps({
   // 文件类型, 例如['png', 'jpg', 'jpeg']
   fileType: {
     type: Array,
-    default: () => ["doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "pdf",'md']
+    default: () => ["doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "pdf"]
   },
   // 是否显示提示
   isShowTip: {
@@ -83,7 +83,7 @@ const showTip = computed(
   () => props.isShowTip && (props.fileType || props.fileSize)
 );
 
-watchEffect(() => props.modelValue, val => {
+watch(() => props.modelValue, val => {
   if (val) {
     let temp = 1;
     // 首先将值转为数组

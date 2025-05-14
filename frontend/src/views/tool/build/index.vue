@@ -111,7 +111,7 @@ import { ElNotification } from 'element-plus'
 import DraggableItem from './DraggableItem'
 import RightPanel from './RightPanel'
 import CodeTypeDialog from './CodeTypeDialog'
-import { onMounted, watchEffect } from 'vue'
+import { onMounted, watch } from 'vue'
 
 const drawingList = ref(drawingDefalut)
 const { proxy } = getCurrentInstance()
@@ -278,7 +278,7 @@ function generateCode() {
   const css = cssStyle(makeUpCss(formData.value))
   return beautifier.html(html + script + css, beautifierConf.html)
 }
-watchEffect(() => activeData.value.label, (val, oldVal) => {
+watch(() => activeData.value.label, (val, oldVal) => {
   if (
     activeData.value.placeholder === undefined
     || !activeData.value.tag
@@ -288,7 +288,7 @@ watchEffect(() => activeData.value.label, (val, oldVal) => {
   }
   activeData.value.placeholder = activeData.value.placeholder.replace(oldVal, '') + val
 })
-watchEffect(activeId, (val) => {
+watch(activeId, (val) => {
   oldActiveId = val
 }, { immediate: true })
 

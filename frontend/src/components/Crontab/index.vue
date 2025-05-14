@@ -169,7 +169,7 @@ const crontabValueString = computed(() => {
         + obj.week
         + (obj.year === "" ? "" : " " + obj.year)
 })
-watchEffect(expression, () => resolveExp())
+watch(expression, () => resolveExp())
 function shouldHide(key) {
     return !(hideComponent.value && hideComponent.value.includes(key))
 }

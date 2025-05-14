@@ -293,11 +293,11 @@ onMounted(() => {
   getMenuTreeselect();
 })
 
-watchEffect(() => props.info.subTableName, val => {
+watch(() => props.info.subTableName, val => {
   setSubTableColumns(val);
 });
 
-watchEffect(() => props.info.tplWebType, val => {
+watch(() => props.info.tplWebType, val => {
   if (val === '') {
     props.info.tplWebType = "element-plus";
   }

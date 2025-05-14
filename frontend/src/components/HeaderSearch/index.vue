@@ -133,7 +133,7 @@ watchEffect(() => {
   searchPool.value = generateRoutes(routes.value)
 })
 
-watchEffect(show, (value) => {
+watch(show, (value) => {
   if (value) {
     document.body.addEventListener('click', close)
   } else {
@@ -141,7 +141,7 @@ watchEffect(show, (value) => {
   }
 })
 
-watchEffect(searchPool, (list) => {
+watch(searchPool, (list) => {
   initFuse(list)
 })
 </script>

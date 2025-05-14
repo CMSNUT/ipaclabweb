@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">智能精准分析实验室</h3>
+      <h3 class="title">vfadmin后台管理系统</h3>
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"
@@ -97,7 +97,7 @@ const captchaEnabled = ref(true);
 const register = ref(false);
 const redirect = ref(undefined);
 
-watchEffect(route, (newRoute) => {
+watch(route, (newRoute) => {
     redirect.value = newRoute.query && newRoute.query.redirect;
 }, { immediate: true });
 

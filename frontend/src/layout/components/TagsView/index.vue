@@ -63,11 +63,11 @@ const visitedViews = computed(() => useTagsViewStore().visitedViews);
 const routes = computed(() => usePermissionStore().routes);
 const theme = computed(() => useSettingsStore().theme);
 
-watchEffect(route, () => {
+watch(route, () => {
   addTags()
   moveToCurrentTag()
 })
-watchEffect(visible, (value) => {
+watch(visible, (value) => {
   if (value) {
     document.body.addEventListener('click', closeMenu)
   } else {

@@ -22,7 +22,7 @@
 </template>
 <script setup>
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import { watchEffect } from 'vue'
+import { watch } from 'vue'
 
 const iconList = ref([])
 const originList = []
@@ -43,7 +43,7 @@ function onSelect(icon) {
   value.value = false
 }
 
-watchEffect(key, (val) => {
+watch(key, (val) => {
   if (val) {
     iconList.value = originList.filter(name => name.indexOf(val) > -1)
   } else {

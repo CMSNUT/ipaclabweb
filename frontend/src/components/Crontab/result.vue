@@ -22,7 +22,7 @@ const dayRuleSup = ref('')
 const dateArr = ref([])
 const resultList = ref([])
 const isShow = ref(false)
-watchEffect(() => props.ex, () => expressionChange())
+watch(() => props.ex, () => expressionChange())
 // 表达式值变化时，开始去计算结果
 function expressionChange() {
     // 计算开始-隐藏结果

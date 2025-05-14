@@ -14,7 +14,7 @@ class AppSettings(BaseSettings):
     """
 
     app_env: str = 'dev'
-    app_name: str = 'IPACLab'
+    app_name: str = 'ipac'
     app_root_path: str = '/dev-api'
     app_host: str = '0.0.0.0'
     app_port: int = 8000
@@ -32,7 +32,7 @@ class JwtSettings(BaseSettings):
     jwt_secret_key: str = 'b01c66dc2c58dc6a0aabfe2144256be36226de378bf87f72c0c795dda67f4d55'
     jwt_algorithm: str = 'HS256'
     jwt_expire_minutes: int = 1440
-    jwt_redis_expire_minutes: int = 10
+    jwt_redis_expire_minutes: int = 30
 
 
 class DataBaseSettings(BaseSettings):
@@ -47,8 +47,8 @@ class DataBaseSettings(BaseSettings):
     db_password: str = 'snut3426'
     db_database: str = 'ipac'
     db_echo: bool = True
-    db_max_overflow: int = 5
-    db_pool_size: int = 100
+    db_max_overflow: int = 10
+    db_pool_size: int = 50
     db_pool_recycle: int = 3600
     db_pool_timeout: int = 30
 
@@ -77,7 +77,7 @@ class GenSettings:
     代码生成配置
     """
 
-    author = 'admin'
+    author = 'insistence'
     package_name = 'module_admin.system'
     auto_remove_pre = False
     table_prefix = 'sys_'
@@ -115,7 +115,6 @@ class UploadSettings:
         'html',
         'htm',
         'txt',
-        'md',
         # 压缩文件
         'rar',
         'zip',

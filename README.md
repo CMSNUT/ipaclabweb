@@ -276,13 +276,13 @@ const deviceId = route.params.deviceId;
 -- ----------------------------
 create table sys_algo (
   algo_id           int(8)      not null auto_increment    comment '算法ID',
-  algo_name         varchar(30) not null                   comment '算法名称',
-  algo_lang         char(1)     default '0'                comment '编程语言',
-  algo_desc         mediumtex   not null                   comment '算法描述',
-  algo_by         varchar(30)   default ''                 comment '创建者',
-  algo_time       datetime                                   comment '创建时间',
-  algo_by         varchar(30)   default ''                 comment '更新者',
-  algo_time       datetime                                   comment '更新时间',
+  algo_name        varchar(30)  not null                   comment '算法名称',
+  algo_lang         char(1)         default '0'            comment '编程语言',
+  algo_desc         mediumtext   default null                   comment '算法描述',
+  create_by         varchar(30)   default ''                 comment '创建者',
+  create_time       datetime                                   comment '创建时间',
+  update_by         varchar(30)   default ''                 comment '更新者',
+  update_time       datetime                                   comment '更新时间',
   primary key (algo_id)
 ) engine=innodb auto_increment=1 comment = '算法程序表';
 ```
@@ -295,7 +295,7 @@ create table sys_algo_tutorial (
   tutorial_id           int(4)      not null auto_increment    comment '教程ID',
   algo_id         int(4)      default null    comment '算法ID',
   tutorial_title         varchar(30)     not null   comment '教程标题',
-  tutorial_content       mediumtex   not null   comment '教程内容',
+  tutorial_content       mediumtext   default null   comment '教程内容(富文本)',
   create_by         varchar(30)     default ''                 comment '创建者',
   create_time       datetime                                   comment '创建时间',
   update_by         varchar(30)     default ''                 comment '更新者',

@@ -66,7 +66,7 @@ export const constantRoutes = [
         path: '/index',
         component: () => import('@/views/dashboard/index'),
         name: 'Index',
-        meta: { title: '首页', icon: 'dashboard' , affix: true}
+        meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -83,73 +83,7 @@ export const constantRoutes = [
         meta: { title: '个人中心', icon: 'user' }
       }
     ]
-  },
-
-  // // 学习资源路由
-  // {
-  //   path: '/resource',
-  //   component: Layout,
-  //   name: 'Resource',
-  //   hidden: true,
-  //   redirect: 'noRedirect',
-  //   meta: {title: '学习资源', icon: 'education'},
-  //   alwaysShow: true,
-  //   children: [
-      // {
-      //   path: 'instrument',
-      //   component: () => import('@/views/resource/instrument/index'),
-      //   name: 'Instrument',
-      //   hidden: true,
-      //   meta: { 
-      //     title: '仪器设备', 
-      //     icon: '', 
-      //     activeMenu: '/resource/instrument', 
-      //     breadcrumb: true
-      //   }
-      // },
-      // 将三级路由改为二级路由，否则不能正确显示页面
-      // {
-      //   path: 'instrument/:deviceId(\\d+)', // 动态路由参数，匹配数字ID
-      //   component: () => import('@/views/resource/instrument/detail'),
-      //   hidden: true,
-      //   name: 'InstrumentDetail',
-      //   meta: { 
-      //     title: '仪器详情', 
-      //     icon: '', 
-      //     activeMenu: '/resource/instrument', 
-      //     breadcrumb: false
-      //   }
-      // },
-  //     {
-  //       path: 'program',
-  //       component: () => import('@/views/resource/program/index'),
-  //       name: 'Program',
-  //       meta: { title: '开源程序', icon: '' }
-  //     },
-  //     {
-  //       path: 'dataset',
-  //       component: () => import('@/views/resource/dataset/index'),
-  //       name: 'Dataset',
-  //       meta: { title: '公共数据', icon: '' }
-  //     },
-  //     {
-  //       path: 'tutorial',
-  //       component: () => import('@/views/resource/tutorial/index'),
-  //       name: 'Tutorial',
-  //       meta: { title: '教程合集', icon: '' }
-  //     },
-  //     {
-  //       path: 'literature',
-  //       component: () => import('@/views/resource/literature/index'),
-  //       name: 'Literature',
-  //       meta: { title: '文献分析', icon: '' }
-  //     }
-  //   ]
-  // }
-
-  
-  
-  
+  }
 ]
 
 // 动态路由，基于用户权限动态去加载
@@ -223,43 +157,7 @@ export const dynamicRoutes = [
         meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
       }
     ]
-  },
-
-  {
-    path: '/resource',
-    component: Layout,
-    hidden: true,
-    roles: ['admin','common'],
-    permissions: ['system:device:list','system:device:query'],
-    children: [
-      {
-        path: 'instrument/:deviceId(\\d+)',
-        component: () => import('@/views/resource/instrument/detail'),
-        name: 'InstrumentDetail',
-        meta: { title: '仪器设备详情', activeMenu: '/resource/instrument' }
-      }
-    ]
   }
-
-  // {
-  //   path: '/resource',
-  //   component: Layout,
-  //   hidden: true,
-  //   // roles: ['admin','common'],
-  //   permissions: ['system:device:list','system:device:query'],
-  //   children: [
-  //     {
-  //       path: '/resource/instrument/detail', // 注意这里不需要动态参数
-  //       component: () => import('@/views/resource/instrument/detail'),
-  //       name: 'InstrumentDetail',
-  //       roles: ['admin','common'],
-  //       permissions: ['system:device:list','system:device:query'],
-  //       meta: { title: '仪器详情' }
-  //     }
-  //   ]
-  // }
-
-  
 ]
 
 const router = createRouter({

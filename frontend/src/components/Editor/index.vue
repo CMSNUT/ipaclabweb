@@ -106,7 +106,7 @@ const styles = computed(() => {
 });
 
 const content = ref("");
-watchEffect(() => props.modelValue, (v) => {
+watch(() => props.modelValue, (v) => {
   if (v !== content.value) {
     content.value = v == undefined ? "<p></p>" : v;
   }

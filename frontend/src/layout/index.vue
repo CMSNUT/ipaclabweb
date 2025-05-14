@@ -40,7 +40,7 @@ const classObj = computed(() => ({
 const { width, height } = useWindowSize();
 const WIDTH = 992; // refer to Bootstrap's responsive design
 
-watchEffect(() => device.value, () => {
+watch(() => device.value, () => {
   if (device.value === 'mobile' && sidebar.value.opened) {
     useAppStore().closeSideBar({ withoutAnimation: false })
   }
