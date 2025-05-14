@@ -105,25 +105,25 @@ create table sys_algo_tag
 -- ----------------------------
 -- 7、公共数据表
 -- ----------------------------
-create table sys_db (
-  db_id         int(6)        not null auto_increment      comment '数据id',
-  db_name       varchar(80)   not null                     comment '数据名称',
-  db_desc       varchar(200)  default null                 comment '数据简介',
-  db_content    mediumtext    default null                 comment '数据详情',
+create table sys_dataset (
+  dataset_id         int(6)        not null auto_increment      comment '数据id',
+  dataset_name       varchar(80)   not null                     comment '数据名称',
+  dataset_desc       varchar(200)  default null                 comment '数据简介',
+  dataset_content    mediumtext    default null                 comment '数据详情',
   create_by         varchar(30)     default ''                 comment '创建人',
   create_time 	    datetime                                   comment '创建时间',
   update_by         varchar(30)     default ''                 comment '更新人',
   update_time       datetime                                   comment '更新时间',
-  primary key (db_id)
+  primary key (dataset_id)
 ) engine=innodb auto_increment=1 comment = '数据表';
 ```
 ## 数据-标签表
 ```bash
-create table sys_db_tag
+create table sys_dataset_tag
 (
-  db_id   int(6) not null comment '数据ID',
+  dataset_id   int(6) not null comment '数据ID',
   tag_id    int(6) not null comment '标签ID',
-  primary key (db_id, tag_id)
+  primary key (dataset_id, tag_id)
 ) engine=innodb comment = '数据与标签关联表';
 ```
 
@@ -147,6 +147,18 @@ create table sys_ref (
   primary key (ref_id)
 ) engine=innodb auto_increment=1 comment = '文献表';
 ```
+
+## 文献-标签表
+```bash
+create table sys_ref_tag
+(
+  ref_id   int(6) not null comment '文献ID',
+  tag_id    int(6) not null comment '标签ID',
+  primary key (ref_id, tag_id)
+) engine=innodb comment = '文献与标签关联表';
+```
+
+
 ## 文献分析
 ```bash
 -- ----------------------------

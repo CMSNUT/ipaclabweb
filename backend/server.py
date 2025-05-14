@@ -27,6 +27,24 @@ from sub_applications.handle import handle_sub_applications
 from utils.common_util import worship
 from utils.log_util import logger
 
+from module_admin.controller.tag_controller import tagController
+from module_admin.controller.device_controller import deviceController
+from module_admin.controller.device_tutorial_controller import device_tutorialController
+from module_admin.controller.algo_controller import algoController
+from module_admin.controller.algo_tag_controller import algo_tagController
+from module_admin.controller.algo_tutorial_controller import algo_tutorialController
+from module_admin.controller.dataset_controller import datasetController
+from module_admin.controller.dataset_tag_controller import dataset_tagController
+from module_admin.controller.project_controller import projectController
+from module_admin.controller.project_doc_controller import project_docController
+from module_admin.controller.project_member_controller import project_memberController
+from module_admin.controller.project_tag_controller import project_tagController
+from module_admin.controller.ref_controller import refController
+from module_admin.controller.ref_article_controller import ref_articleController
+from module_admin.controller.ref_reprod_controller import ref_reprodController
+from module_admin.controller.ref_tag_controller import ref_tagController
+
+
 
 # 生命周期事件
 @asynccontextmanager
@@ -79,6 +97,23 @@ controller_list = [
     {'router': cacheController, 'tags': ['系统监控-缓存监控']},
     {'router': commonController, 'tags': ['通用模块']},
     {'router': genController, 'tags': ['代码生成']},
+
+    {'router': tagController, 'tags': ['系统管理-标签管理']},
+    {'router': deviceController, 'tags': ['系统管理-仪器设备管理']},
+    {'router': device_tutorialController, 'tags': ['系统管理-仪器设备教程']},
+    {'router': algoController, 'tags': ['系统管理-算法程序管理']},
+    {'router': algo_tagController, 'tags': ['系统管理-算法程序标签']},
+    {'router': algo_tutorialController, 'tags': ['系统管理-算法程序教程']},
+    {'router': datasetController, 'tags': ['系统管理-数据集管理']},
+    {'router': dataset_tagController, 'tags': ['系统管理-数据集标签']},
+    {'router': refController, 'tags': ['系统管理-文献管理']},
+    {'router': ref_articleController, 'tags': ['系统管理-文献分析']},
+    {'router': ref_reprodController, 'tags': ['系统管理-文献复现']},
+    {'router': ref_tagController, 'tags': ['系统管理-文献标签']},
+    {'router': projectController, 'tags': ['系统管理-项目管理']},
+    {'router': project_tagController, 'tags': ['系统管理-项目标签']},
+    {'router': project_memberController, 'tags': ['系统管理-项目成员']},
+    {'router': project_docController, 'tags': ['系统管理-项目文档']},
 ]
 
 for controller in controller_list:
