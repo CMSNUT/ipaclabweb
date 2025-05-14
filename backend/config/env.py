@@ -77,7 +77,7 @@ class GenSettings:
     代码生成配置
     """
 
-    author = 'insistence'
+    author = 'admin'
     package_name = 'module_admin.system'
     auto_remove_pre = False
     table_prefix = 'sys_'
