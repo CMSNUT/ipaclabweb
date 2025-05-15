@@ -11,7 +11,7 @@
             <div class="head-container">
               <el-input
                 v-model="deptName"
-                placeholder="请输入部门名称"
+                placeholder="请输入用户类别"
                 clearable
                 prefix-icon="Search"
                 style="margin-bottom: 20px"
@@ -42,10 +42,10 @@
               v-show="showSearch"
               label-width="68px"
             >
-              <el-form-item label="用户名称" prop="userName">
+              <el-form-item label="用户姓名" prop="userName">
                 <el-input
                   v-model="queryParams.userName"
-                  placeholder="请输入用户名称"
+                  placeholder="请输入用户姓名"
                   clearable
                   style="width: 240px"
                   @keyup.enter="handleQuery"
@@ -167,7 +167,7 @@
                 v-if="columns[0].visible"
               />
               <el-table-column
-                label="用户名称"
+                label="用户名"
                 align="center"
                 key="userName"
                 prop="userName"
@@ -175,7 +175,7 @@
                 :show-overflow-tooltip="true"
               />
               <el-table-column
-                label="用户昵称"
+                label="真实姓名"
                 align="center"
                 key="nickName"
                 prop="nickName"
@@ -183,7 +183,7 @@
                 :show-overflow-tooltip="true"
               />
               <el-table-column
-                label="部门"
+                label="用户类别"
                 align="center"
                 key="deptName"
                 prop="dept.deptName"
@@ -303,22 +303,22 @@
       <el-form :model="form" :rules="rules" ref="userRef" label-width="80px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="用户昵称" prop="nickName">
+            <el-form-item label="真实姓名" prop="nickName">
               <el-input
                 v-model="form.nickName"
-                placeholder="请输入用户昵称"
+                placeholder="请输入真实姓名"
                 maxlength="30"
               />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="归属部门" prop="deptId">
+            <el-form-item label="用户类别" prop="deptId">
               <el-tree-select
                 v-model="form.deptId"
                 :data="enabledDeptOptions"
                 :props="{ value: 'id', label: 'label', children: 'children' }"
                 value-key="id"
-                placeholder="请选择归属部门"
+                placeholder="请选择用户类别"
                 check-strictly
               />
             </el-form-item>
@@ -348,12 +348,12 @@
           <el-col :span="12">
             <el-form-item
               v-if="form.userId == undefined"
-              label="用户名称"
+              label="用户名"
               prop="userName"
             >
               <el-input
                 v-model="form.userName"
-                placeholder="请输入用户名称"
+                placeholder="请输入用户名,教师工号/学生学号/其他人员手机号"
                 maxlength="30"
               />
             </el-form-item>
@@ -366,7 +366,7 @@
             >
               <el-input
                 v-model="form.password"
-                placeholder="请输入用户密码"
+                placeholder="请输入用户密码，初始密码(maim1234)"
                 type="password"
                 maxlength="20"
                 show-password
