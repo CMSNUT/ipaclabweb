@@ -1,22 +1,22 @@
-from sqlalchemy import Integer, Text, Column, DateTime, CHAR, String
+from sqlalchemy import String, DateTime, Text, Integer, Column, CHAR
 from config.database import Base
 
 
 class ResAlgo(Base):
     """
-    算法管理表
+    程序管理表
     """
 
     __tablename__ = 'res_algo'
 
-    algo_id = Column(Integer, primary_key=True, autoincrement=True, nullable=False, comment='算法id')
-    algo_name = Column(String(80), nullable=False, comment='算法名称')
-    algo_type = Column(CHAR(1), nullable=True, comment='算法类别')
-    algo_lang = Column(CHAR(1), nullable=True, comment='算法语言')
-    algo_content = Column(Text, nullable=True, comment='算法详情')
-    create_by = Column(String(30), nullable=True, comment='创建人')
+    algo_id = Column(Integer, primary_key=True, autoincrement=True, nullable=False, comment='程序ID')
+    algo_name = Column(String(64), nullable=False, comment='程序名称')
+    algo_desc = Column(Text, nullable=True, comment='程序介绍')
+    algo_type = Column(CHAR(1), nullable=False, comment='程序类型')
+    algo_lang = Column(CHAR(1), nullable=False, comment='编程语言')
+    create_by = Column(String(15), nullable=True, comment='创建者')
     create_time = Column(DateTime, nullable=True, comment='创建时间')
-    update_by = Column(String(30), nullable=True, comment='更新人')
+    update_by = Column(String(15), nullable=True, comment='更新者')
     update_time = Column(DateTime, nullable=True, comment='更新时间')
 
 

@@ -36,7 +36,7 @@ algo_page_query: AlgoPageQueryModel = Depends(AlgoPageQueryModel.as_query),
 
 @algoController.post('', dependencies=[Depends(CheckUserInterfaceAuth('resource:algo:add'))])
 @ValidateFields(validate_model='add_algo')
-@Log(title='算法管理', business_type=BusinessType.INSERT)
+@Log(title='程序管理', business_type=BusinessType.INSERT)
 async def add_resource_algo(
     request: Request,
     add_algo: AlgoModel,
@@ -55,7 +55,7 @@ async def add_resource_algo(
 
 @algoController.put('', dependencies=[Depends(CheckUserInterfaceAuth('resource:algo:edit'))])
 @ValidateFields(validate_model='edit_algo')
-@Log(title='算法管理', business_type=BusinessType.UPDATE)
+@Log(title='程序管理', business_type=BusinessType.UPDATE)
 async def edit_resource_algo(
     request: Request,
     edit_algo: AlgoModel,
@@ -71,7 +71,7 @@ async def edit_resource_algo(
 
 
 @algoController.delete('/{algo_ids}', dependencies=[Depends(CheckUserInterfaceAuth('resource:algo:remove'))])
-@Log(title='算法管理', business_type=BusinessType.DELETE)
+@Log(title='程序管理', business_type=BusinessType.DELETE)
 async def delete_resource_algo(request: Request, algo_ids: str, query_db: AsyncSession = Depends(get_db)):
     delete_algo = DeleteAlgoModel(algoIds=algo_ids)
     delete_algo_result = await AlgoService.delete_algo_services(query_db, delete_algo)
@@ -91,7 +91,7 @@ async def query_detail_resource_algo(request: Request, algo_id: int, query_db: A
 
 
 @algoController.post('/export', dependencies=[Depends(CheckUserInterfaceAuth('resource:algo:export'))])
-@Log(title='算法管理', business_type=BusinessType.EXPORT)
+@Log(title='程序管理', business_type=BusinessType.EXPORT)
 async def export_resource_algo_list(
     request: Request,
     algo_page_query: AlgoPageQueryModel = Form(),

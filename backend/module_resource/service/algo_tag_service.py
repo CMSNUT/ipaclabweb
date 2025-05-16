@@ -11,7 +11,7 @@ from utils.excel_util import ExcelUtil
 
 class Algo_tagService:
     """
-    算法与标签关联模块服务层
+    程序标签关联模块服务层
     """
 
     @classmethod
@@ -19,12 +19,12 @@ class Algo_tagService:
         cls, query_db: AsyncSession, query_object: Algo_tagPageQueryModel, is_page: bool = False
     ):
         """
-        获取算法与标签关联列表信息service
+        获取程序标签关联列表信息service
 
         :param query_db: orm对象
         :param query_object: 查询参数对象
         :param is_page: 是否开启分页
-        :return: 算法与标签关联列表信息对象
+        :return: 程序标签关联列表信息对象
         """
         algo_tag_list_result = await Algo_tagDao.get_algo_tag_list(query_db, query_object, is_page)
 
@@ -34,11 +34,11 @@ class Algo_tagService:
     @classmethod
     async def add_algo_tag_services(cls, query_db: AsyncSession, page_object: Algo_tagModel):
         """
-        新增算法与标签关联信息service
+        新增程序标签关联信息service
 
         :param query_db: orm对象
-        :param page_object: 新增算法与标签关联对象
-        :return: 新增算法与标签关联校验结果
+        :param page_object: 新增程序标签关联对象
+        :return: 新增程序标签关联校验结果
         """
         try:
             await Algo_tagDao.add_algo_tag_dao(query_db, page_object)
@@ -51,13 +51,13 @@ class Algo_tagService:
     @classmethod
     async def edit_algo_tag_services(cls, query_db: AsyncSession, page_object: Algo_tagModel):
         """
-        编辑算法与标签关联信息service
+        编辑程序标签关联信息service
 
         :param query_db: orm对象
-        :param page_object: 编辑算法与标签关联对象
-        :return: 编辑算法与标签关联校验结果
+        :param page_object: 编辑程序标签关联对象
+        :return: 编辑程序标签关联校验结果
         """
-        edit_algo_tag = page_object.model_dump(exclude_unset=True, exclude={})
+        edit_algo_tag = page_object.model_dump(exclude_unset=True, exclude={'create_by', 'create_time', })
         algo_tag_info = await cls.algo_tag_detail_services(query_db, page_object.algo_id)
         if algo_tag_info.algo_id:
             try:
@@ -68,16 +68,16 @@ class Algo_tagService:
                 await query_db.rollback()
                 raise e
         else:
-            raise ServiceException(message='算法与标签关联不存在')
+            raise ServiceException(message='程序标签关联不存在')
 
     @classmethod
     async def delete_algo_tag_services(cls, query_db: AsyncSession, page_object: DeleteAlgo_tagModel):
         """
-        删除算法与标签关联信息service
+        删除程序标签关联信息service
 
         :param query_db: orm对象
-        :param page_object: 删除算法与标签关联对象
-        :return: 删除算法与标签关联校验结果
+        :param page_object: 删除程序标签关联对象
+        :return: 删除程序标签关联校验结果
         """
         if page_object.algo_ids:
             algo_id_list = page_object.algo_ids.split(',')
@@ -90,16 +90,16 @@ class Algo_tagService:
                 await query_db.rollback()
                 raise e
         else:
-            raise ServiceException(message='传入算法ID为空')
+            raise ServiceException(message='传入程序ID为空')
 
     @classmethod
     async def algo_tag_detail_services(cls, query_db: AsyncSession, algo_id: int):
         """
-        获取算法与标签关联详细信息service
+        获取程序标签关联详细信息service
 
         :param query_db: orm对象
-        :param algo_id: 算法ID
-        :return: 算法ID对应的信息
+        :param algo_id: 程序ID
+        :return: 程序ID对应的信息
         """
         algo_tag = await Algo_tagDao.get_algo_tag_detail_by_id(query_db, algo_id=algo_id)
         if algo_tag:
@@ -112,15 +112,19 @@ class Algo_tagService:
     @staticmethod
     async def export_algo_tag_list_services(algo_tag_list: List):
         """
-        导出算法与标签关联信息service
+        导出程序标签关联信息service
 
-        :param algo_tag_list: 算法与标签关联信息列表
-        :return: 算法与标签关联信息对应excel的二进制数据
+        :param algo_tag_list: 程序标签关联信息列表
+        :return: 程序标签关联信息对应excel的二进制数据
         """
         # 创建一个映射字典，将英文键映射到中文键
         mapping_dict = {
-            'algoId': '算法ID',
+            'algoId': '程序ID',
             'tagId': '标签ID',
+            'createBy': '创建者',
+            'createTime': '创建时间',
+            'updateBy': '更新者',
+            'updateTime': '更新时间',
         }
         binary_data = ExcelUtil.export_list2excel(algo_tag_list, mapping_dict)
 

@@ -5,25 +5,25 @@ drop table if exists sys_dept;
 create table sys_dept (
   dept_id           int(6)          not null auto_increment    comment '部门id',
   parent_id         int(6)          default 0                  comment '父部门id',
-  ancestors         varchar(50)     default ''                 comment '祖级列表',
-  dept_name         varchar(30)     default ''                 comment '部门名称',
+  ancestors         varchar(20)     default ''                 comment '祖级列表',
+  dept_name         varchar(20)     default ''                 comment '部门名称',
   order_num         int(4)          default 0                  comment '显示顺序',
-  leader            varchar(20)     default null               comment '负责人',
+  leader            varchar(15)     default null               comment '负责人',
   phone             varchar(11)     default null               comment '联系电话',
   email             varchar(50)     default null               comment '邮箱',
   status            char(1)         default '0'                comment '部门状态（0正常 1停用）',
   del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
-  create_by         varchar(30)     default ''                 comment '创建者',
+  create_by         varchar(15)     default ''                 comment '创建者',
   create_time 	    datetime                                   comment '创建时间',
-  update_by         varchar(30)     default ''                 comment '更新者',
+  update_by         varchar(15)     default ''                 comment '更新者',
   update_time       datetime                                   comment '更新时间',
   primary key (dept_id)
-) engine=innodb auto_increment=200 comment = '部门表';
+) engine=innodb auto_increment=1 comment = '部门表';
 
 -- ----------------------------
 -- 初始化-部门表数据
 -- ----------------------------
-insert into sys_dept values(100,  0,   '0',          'IPAC Lab',   0, '夏冬辉', '15991963816', 'niangao@qq.com', '0', '0', 'admin', sysdate(), '', null);
+insert into sys_dept values(1,  0,   '0',          'IPAC Lab',   0, '夏冬辉', '15991963816', 'niangao@qq.com', '0', '0', 'admin', sysdate(), '', null);
 
 
 -- ----------------------------
@@ -33,8 +33,8 @@ drop table if exists sys_user;
 create table sys_user (
   user_id           int(6)      not null auto_increment    comment '用户ID',
   dept_id           int(6)      default null               comment '部门ID',
-  user_name         varchar(30)     not null                   comment '用户账号',
-  nick_name         varchar(30)     not null                   comment '用户昵称',
+  user_name         varchar(15)     not null                   comment '用户账号',
+  nick_name         varchar(15)     not null                   comment '用户昵称',
   user_type         varchar(2)      default '00'               comment '用户类型（00系统用户）',
   email             varchar(50)     default ''                 comment '用户邮箱',
   phonenumber       varchar(11)     default ''                 comment '手机号码',
@@ -45,18 +45,18 @@ create table sys_user (
   del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
   login_ip          varchar(128)    default ''                 comment '最后登录IP',
   login_date        datetime                                   comment '最后登录时间',
-  create_by         varchar(30)     default ''                 comment '创建者',
+  create_by         varchar(15)     default ''                 comment '创建者',
   create_time       datetime                                   comment '创建时间',
-  update_by         varchar(30)     default ''                 comment '更新者',
+  update_by         varchar(15)     default ''                 comment '更新者',
   update_time       datetime                                   comment '更新时间',
-  remark            varchar(500)    default null               comment '备注',
+  remark            varchar(50)    default null               comment '备注',
   primary key (user_id)
-) engine=innodb auto_increment=100 comment = '用户信息表';
+) engine=innodb auto_increment=1 comment = '用户信息表';
 
 -- ----------------------------
 -- 初始化-用户信息表数据
 -- ----------------------------
-insert into sys_user values(1,  103, 'admin',   '超级管理员', '00', 'niangao@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', sysdate(), 'admin', sysdate(), '', null, '管理员');
+insert into sys_user values(1,  1, 'admin',   '超级管理员', '00', 'niangao@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', sysdate(), 'admin', sysdate(), '', null, '管理员');
 
 -- ----------------------------
 -- 3、岗位信息表
@@ -65,15 +65,15 @@ drop table if exists sys_post;
 create table sys_post
 (
   post_id       int(6)      not null auto_increment    comment '岗位ID',
-  post_code     varchar(64)     not null                   comment '岗位编码',
-  post_name     varchar(50)     not null                   comment '岗位名称',
+  post_code     varchar(6)     not null                   comment '岗位编码',
+  post_name     varchar(20)     not null                   comment '岗位名称',
   post_sort     int(4)          not null                   comment '显示顺序',
   status        char(1)         not null                   comment '状态（0正常 1停用）',
-  create_by     varchar(64)     default ''                 comment '创建者',
+  create_by     varchar(15)     default ''                 comment '创建者',
   create_time   datetime                                   comment '创建时间',
-  update_by     varchar(64)     default ''			       comment '更新者',
+  update_by     varchar(15)     default ''			       comment '更新者',
   update_time   datetime                                   comment '更新时间',
-  remark        varchar(500)    default null               comment '备注',
+  remark        varchar(50)    default null               comment '备注',
   primary key (post_id)
 ) engine=innodb comment = '岗位信息表';
 
@@ -92,7 +92,7 @@ insert into sys_post values(4, 'user', '普通员工',  4, '0', 'admin', sysdate
 drop table if exists sys_role;
 create table sys_role (
   role_id              int(6)      not null auto_increment    comment '角色ID',
-  role_name            varchar(30)     not null                   comment '角色名称',
+  role_name            varchar(15)     not null                   comment '角色名称',
   role_key             varchar(100)    not null                   comment '角色权限字符串',
   role_sort            int(4)          not null                   comment '显示顺序',
   data_scope           char(1)         default '1'                comment '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
@@ -100,13 +100,13 @@ create table sys_role (
   dept_check_strictly  tinyint(1)      default 1                  comment '部门树选择项是否关联显示',
   status               char(1)         not null                   comment '角色状态（0正常 1停用）',
   del_flag             char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
-  create_by            varchar(64)     default ''                 comment '创建者',
+  create_by            varchar(15)     default ''                 comment '创建者',
   create_time          datetime                                   comment '创建时间',
-  update_by            varchar(64)     default ''                 comment '更新者',
+  update_by            varchar(15)     default ''                 comment '更新者',
   update_time          datetime                                   comment '更新时间',
-  remark               varchar(500)    default null               comment '备注',
+  remark               varchar(50)    default null               comment '备注',
   primary key (role_id)
-) engine=innodb auto_increment=100 comment = '角色信息表';
+) engine=innodb auto_increment=3 comment = '角色信息表';
 
 -- ----------------------------
 -- 初始化-角色信息表数据
@@ -135,11 +135,11 @@ create table sys_menu (
   status            char(1)         default 0                  comment '菜单状态（0正常 1停用）',
   perms             varchar(100)    default null               comment '权限标识',
   icon              varchar(100)    default '#'                comment '菜单图标',
-  create_by         varchar(30)     default ''                 comment '创建者',
+  create_by         varchar(15)     default ''                 comment '创建者',
   create_time       datetime                                   comment '创建时间',
-  update_by         varchar(30)     default ''                 comment '更新者',
+  update_by         varchar(15)     default ''                 comment '更新者',
   update_time       datetime                                   comment '更新时间',
-  remark            varchar(500)    default ''                 comment '备注',
+  remark            varchar(50)    default ''                 comment '备注',
   primary key (menu_id)
 ) engine=innodb auto_increment=2000 comment = '菜单权限表';
 
@@ -295,7 +295,7 @@ create table sys_role_dept (
 -- ----------------------------
 -- 初始化-角色和部门关联表数据
 -- ----------------------------
-insert into sys_role_dept values ('2', '100');
+insert into sys_role_dept values ('2', '1');
 
 
 
@@ -353,17 +353,17 @@ drop table if exists sys_dict_type;
 create table sys_dict_type
 (
   dict_id          int(6)      not null auto_increment    comment '字典主键',
-  dict_name        varchar(100)    default ''                 comment '字典名称',
-  dict_type        varchar(100)    default ''                 comment '字典类型',
+  dict_name        varchar(20)    default ''                 comment '字典名称',
+  dict_type        varchar(20)    default ''                 comment '字典类型',
   status           char(1)         default '0'                comment '状态（0正常 1停用）',
-  create_by        varchar(64)     default ''                 comment '创建者',
+  create_by        varchar(15)     default ''                 comment '创建者',
   create_time      datetime                                   comment '创建时间',
-  update_by        varchar(64)     default ''                 comment '更新者',
+  update_by        varchar(15)     default ''                 comment '更新者',
   update_time      datetime                                   comment '更新时间',
   remark           varchar(500)    default null               comment '备注',
   primary key (dict_id),
   unique (dict_type)
-) engine=innodb auto_increment=100 comment = '字典类型表';
+) engine=innodb auto_increment=12 comment = '字典类型表';
 
 insert into sys_dict_type values(1,  '用户性别',   'sys_user_sex',        '0', 'admin', sysdate(), '', null, '用户性别列表');
 insert into sys_dict_type values(2,  '菜单状态',   'sys_show_hide',       '0', 'admin', sysdate(), '', null, '菜单状态列表');
@@ -385,21 +385,21 @@ drop table if exists sys_dict_data;
 create table sys_dict_data
 (
   dict_code        int(6)      not null auto_increment    comment '字典编码',
-  dict_sort        int(4)          default 0                  comment '字典排序',
-  dict_label       varchar(100)    default ''                 comment '字典标签',
-  dict_value       varchar(100)    default ''                 comment '字典键值',
-  dict_type        varchar(100)    default ''                 comment '字典类型',
-  css_class        varchar(100)    default null               comment '样式属性（其他样式扩展）',
-  list_class       varchar(100)    default null               comment '表格回显样式',
+  dict_sort        int(6)          default 0                  comment '字典排序',
+  dict_label       varchar(20)    default ''                 comment '字典标签',
+  dict_value       varchar(20)    default ''                 comment '字典键值',
+  dict_type        varchar(30)    default ''                 comment '字典类型',
+  css_class        varchar(10)    default null               comment '样式属性（其他样式扩展）',
+  list_class       varchar(10)    default null               comment '表格回显样式',
   is_default       char(1)         default 'N'                comment '是否默认（Y是 N否）',
   status           char(1)         default '0'                comment '状态（0正常 1停用）',
-  create_by        varchar(64)     default ''                 comment '创建者',
+  create_by        varchar(15)     default ''                 comment '创建者',
   create_time      datetime                                   comment '创建时间',
-  update_by        varchar(64)     default ''                 comment '更新者',
+  update_by        varchar(15)     default ''                 comment '更新者',
   update_time      datetime                                   comment '更新时间',
-  remark           varchar(500)    default null               comment '备注',
+  remark           varchar(50)    default null               comment '备注',
   primary key (dict_code)
-) engine=innodb auto_increment=100 comment = '字典数据表';
+) engine=innodb auto_increment=33 comment = '字典数据表';
 
 insert into sys_dict_data values(1,  1,  '男',       '0',           'sys_user_sex',        '',   '',        'Y', '0', 'admin', sysdate(), '', null, '性别男');
 insert into sys_dict_data values(2,  2,  '女',       '1',           'sys_user_sex',        '',   '',        'N', '0', 'admin', sysdate(), '', null, '性别女');
@@ -445,9 +445,9 @@ create table sys_config (
   config_key        varchar(100)    default ''                 comment '参数键名',
   config_value      varchar(500)    default ''                 comment '参数键值',
   config_type       char(1)         default 'N'                comment '系统内置（Y是 N否）',
-  create_by         varchar(30)     default ''                 comment '创建者',
+  create_by         varchar(15)     default ''                 comment '创建者',
   create_time       datetime                                   comment '创建时间',
-  update_by         varchar(30)     default ''                 comment '更新者',
+  update_by         varchar(15)     default ''                 comment '更新者',
   update_time       datetime                                   comment '更新时间',
   remark            varchar(500)    default null               comment '备注',
   primary key (config_id)
@@ -497,9 +497,9 @@ create table sys_job (
   misfire_policy      varchar(20)   default '3'                comment '计划执行错误策略（1立即执行 2执行一次 3放弃执行）',
   concurrent          char(1)       default '1'                comment '是否并发执行（0允许 1禁止）',
   status              char(1)       default '0'                comment '状态（0正常 1暂停）',
-  create_by           varchar(64)   default ''                 comment '创建者',
+  create_by           varchar(15)   default ''                 comment '创建者',
   create_time         datetime                                 comment '创建时间',
-  update_by           varchar(64)   default ''                 comment '更新者',
+  update_by           varchar(15)   default ''                 comment '更新者',
   update_time         datetime                                 comment '更新时间',
   remark              varchar(500)  default ''                 comment '备注信息',
   primary key (job_id, job_name, job_group)
@@ -541,9 +541,9 @@ create table sys_notice (
   notice_type       char(1)         not null                   comment '公告类型（1通知 2公告）',
   notice_content    longblob        default null               comment '公告内容',
   status            char(1)         default '0'                comment '公告状态（0正常 1关闭）',
-  create_by         varchar(30)     default ''                 comment '创建者',
+  create_by         varchar(15)     default ''                 comment '创建者',
   create_time       datetime                                   comment '创建时间',
-  update_by         varchar(30)     default ''                 comment '更新者',
+  update_by         varchar(15)     default ''                 comment '更新者',
   update_time       datetime                                   comment '更新时间',
   remark            varchar(255)    default null               comment '备注',
   primary key (notice_id)
@@ -568,18 +568,18 @@ create table gen_table (
   sub_table_fk_name varchar(64)     default null               comment '子表关联的外键名',
   class_name        varchar(100)    default ''                 comment '实体类名称',
   tpl_category      varchar(200)    default 'crud'             comment '使用的模板（crud单表操作 tree树表操作）',
-  tpl_web_type      varchar(30)     default ''                 comment '前端模板类型（element-ui模版 element-plus模版）',
+  tpl_web_type      varchar(15)     default ''                 comment '前端模板类型（element-ui模版 element-plus模版）',
   package_name      varchar(100)                               comment '生成包路径',
-  module_name       varchar(30)                                comment '生成模块名',
-  business_name     varchar(30)                                comment '生成业务名',
+  module_name       varchar(15)                                comment '生成模块名',
+  business_name     varchar(15)                                comment '生成业务名',
   function_name     varchar(50)                                comment '生成功能名',
   function_author   varchar(50)                                comment '生成功能作者',
   gen_type          char(1)         default '0'                comment '生成代码方式（0zip压缩包 1自定义路径）',
   gen_path          varchar(200)    default '/'                comment '生成路径（不填默认项目路径）',
   options           varchar(1000)                              comment '其它生成选项',
-  create_by         varchar(30)     default ''                 comment '创建者',
+  create_by         varchar(15)     default ''                 comment '创建者',
   create_time 	    datetime                                   comment '创建时间',
-  update_by         varchar(30)     default ''                 comment '更新者',
+  update_by         varchar(15)     default ''                 comment '更新者',
   update_time       datetime                                   comment '更新时间',
   remark            varchar(500)    default null               comment '备注',
   primary key (table_id)
@@ -610,9 +610,9 @@ create table gen_table_column (
   html_type         varchar(200)                               comment '显示类型（文本框、文本域、下拉框、复选框、单选框、日期控件）',
   dict_type         varchar(200)    default ''                 comment '字典类型',
   sort              int                                        comment '排序',
-  create_by         varchar(30)     default ''                 comment '创建者',
+  create_by         varchar(15)     default ''                 comment '创建者',
   create_time 	    datetime                                   comment '创建时间',
-  update_by         varchar(30)     default ''                 comment '更新者',
+  update_by         varchar(15)     default ''                 comment '更新者',
   update_time       datetime                                   comment '更新时间',
   primary key (column_id)
 ) engine=innodb auto_increment=1 comment = '代码生成业务表字段';

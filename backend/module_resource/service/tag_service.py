@@ -3,8 +3,8 @@ from typing import List
 from config.constant import CommonConstant
 from exceptions.exception import ServiceException
 from module_admin.entity.vo.common_vo import CrudResponseModel
-from module_admin.dao.tag_dao import TagDao
-from module_admin.entity.vo.tag_vo import DeleteTagModel, TagModel, TagPageQueryModel
+from module_resource.dao.tag_dao import TagDao
+from module_resource.entity.vo.tag_vo import DeleteTagModel, TagModel, TagPageQueryModel
 from utils.common_util import CamelCaseUtil
 from utils.excel_util import ExcelUtil
 
@@ -57,7 +57,7 @@ class TagService:
         :param page_object: 编辑标签管理对象
         :return: 编辑标签管理校验结果
         """
-        edit_tag = page_object.model_dump(exclude_unset=True, exclude={})
+        edit_tag = page_object.model_dump(exclude_unset=True, exclude={'create_by', 'create_time', })
         tag_info = await cls.tag_detail_services(query_db, page_object.tag_id)
         if tag_info.tag_id:
             try:
@@ -120,7 +120,13 @@ class TagService:
         # 创建一个映射字典，将英文键映射到中文键
         mapping_dict = {
             'tagId': '标签id',
-            'tagName': '标签名称',
+            'tagLabel': '标签名称',
+            'tagValue': '标签值',
+            'parentId': '父标签id',
+            'createBy': '创建者',
+            'createTime': '创建时间',
+            'updateBy': '更新者',
+            'updateTime': '更新时间',
         }
         binary_data = ExcelUtil.export_list2excel(tag_list, mapping_dict)
 

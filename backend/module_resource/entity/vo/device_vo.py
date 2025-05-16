@@ -14,12 +14,12 @@ class DeviceModel(BaseModel):
     """
     model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
 
-    device_id: Optional[int] = Field(default=None, description='仪器id')
+    device_id: Optional[int] = Field(default=None, description='仪器ID')
     device_name: Optional[str] = Field(default=None, description='仪器名称')
-    device_img: Optional[str] = Field(default=None, description='图片地址')
-    create_by: Optional[str] = Field(default=None, description='创建人')
+    device_img: Optional[str] = Field(default=None, description='仪器图片')
+    create_by: Optional[str] = Field(default=None, description='创建者')
     create_time: Optional[datetime] = Field(default=None, description='创建时间')
-    update_by: Optional[str] = Field(default=None, description='更新人')
+    update_by: Optional[str] = Field(default=None, description='更新者')
     update_time: Optional[datetime] = Field(default=None, description='更新时间')
 
     @NotBlank(field_name='device_name', message='仪器名称不能为空')
@@ -57,4 +57,4 @@ class DeleteDeviceModel(BaseModel):
 
     model_config = ConfigDict(alias_generator=to_camel)
 
-    device_ids: str = Field(description='需要删除的仪器id')
+    device_ids: str = Field(description='需要删除的仪器ID')

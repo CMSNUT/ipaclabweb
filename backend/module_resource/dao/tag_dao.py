@@ -1,7 +1,7 @@
 from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.tag_do import SysTag
-from module_admin.entity.vo.tag_vo import TagModel, TagPageQueryModel
+from module_resource.entity.do.tag_do import ResTag
+from module_resource.entity.vo.tag_vo import TagModel, TagPageQueryModel
 from utils.page_util import PageUtil
 
 
@@ -22,9 +22,9 @@ class TagDao:
         tag_info = (
             (
                 await db.execute(
-                    select(SysTag)
+                    select(ResTag)
                     .where(
-                        SysTag.tag_id == tag_id
+                        ResTag.tag_id == tag_id
                     )
                 )
             )
@@ -46,7 +46,7 @@ class TagDao:
         tag_info = (
             (
                 await db.execute(
-                    select(SysTag).where(
+                    select(ResTag).where(
                     )
                 )
             )
@@ -67,11 +67,11 @@ class TagDao:
         :return: 标签管理列表信息对象
         """
         query = (
-            select(SysTag)
+            select(ResTag)
             .where(
-                SysTag.tag_name.like(f'%{query_object.tag_name}%') if query_object.tag_name else True,
+                ResTag.tag_label.like(f'%{query_object.tag_label}%') if query_object.tag_label else True,
             )
-            .order_by(SysTag.tag_id)
+            .order_by(ResTag.tag_id)
             .distinct()
         )
         tag_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
@@ -87,7 +87,7 @@ class TagDao:
         :param tag: 标签管理对象
         :return:
         """
-        db_tag = SysTag(**tag.model_dump(exclude={}))
+        db_tag = ResTag(**tag.model_dump(exclude={}))
         db.add(db_tag)
         await db.flush()
 
@@ -102,7 +102,7 @@ class TagDao:
         :param tag: 需要更新的标签管理字典
         :return:
         """
-        await db.execute(update(SysTag), [tag])
+        await db.execute(update(ResTag), [tag])
 
     @classmethod
     async def delete_tag_dao(cls, db: AsyncSession, tag: TagModel):
@@ -113,5 +113,5 @@ class TagDao:
         :param tag: 标签管理对象
         :return:
         """
-        await db.execute(delete(SysTag).where(SysTag.tag_id.in_([tag.tag_id])))
+        await db.execute(delete(ResTag).where(ResTag.tag_id.in_([tag.tag_id])))
 

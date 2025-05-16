@@ -90,7 +90,7 @@ class DeviceService:
                 await query_db.rollback()
                 raise e
         else:
-            raise ServiceException(message='传入仪器id为空')
+            raise ServiceException(message='传入仪器ID为空')
 
     @classmethod
     async def device_detail_services(cls, query_db: AsyncSession, device_id: int):
@@ -98,8 +98,8 @@ class DeviceService:
         获取仪器管理详细信息service
 
         :param query_db: orm对象
-        :param device_id: 仪器id
-        :return: 仪器id对应的信息
+        :param device_id: 仪器ID
+        :return: 仪器ID对应的信息
         """
         device = await DeviceDao.get_device_detail_by_id(query_db, device_id=device_id)
         if device:
@@ -119,12 +119,12 @@ class DeviceService:
         """
         # 创建一个映射字典，将英文键映射到中文键
         mapping_dict = {
-            'deviceId': '仪器id',
+            'deviceId': '仪器ID',
             'deviceName': '仪器名称',
-            'deviceImg': '图片地址',
-            'createBy': '创建人',
+            'deviceImg': '仪器图片',
+            'createBy': '创建者',
             'createTime': '创建时间',
-            'updateBy': '更新人',
+            'updateBy': '更新者',
             'updateTime': '更新时间',
         }
         binary_data = ExcelUtil.export_list2excel(device_list, mapping_dict)

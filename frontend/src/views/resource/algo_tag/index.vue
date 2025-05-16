@@ -1,15 +1,23 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="算法ID" prop="algoId">
-        <el-select v-model="queryParams.algoId" placeholder="请选择算法ID" clearable style="width: 240px">
-          <el-option label="请选择字典生成" value="" />
-        </el-select>
+      <el-form-item label="程序ID" prop="algoId">
+        <el-input
+          v-model="queryParams.algoId"
+          placeholder="请输入程序ID"
+          clearable
+          style="width: 240px"
+          @keyup.enter="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="标签ID" prop="tagId">
-        <el-select v-model="queryParams.tagId" placeholder="请选择标签ID" clearable style="width: 240px">
-          <el-option label="请选择字典生成" value="" />
-        </el-select>
+        <el-input
+          v-model="queryParams.tagId"
+          placeholder="请输入标签ID"
+          clearable
+          style="width: 240px"
+          @keyup.enter="handleQuery"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -61,7 +69,7 @@
 
     <el-table v-loading="loading" :data="algo_tagList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="算法ID" align="center" prop="algoId" />
+      <el-table-column label="程序ID" align="center" prop="algoId" />
       <el-table-column label="标签ID" align="center" prop="tagId" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
@@ -79,19 +87,10 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改算法与标签关联对话框 -->
+    <!-- 添加或修改程序标签关联对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="algo_tagRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item v-if="renderField(true, true)" label="算法ID" prop="algoId">
-        <el-select v-model="form.algoId" placeholder="请选择算法ID">
-          <el-option
-            v-for="dict in algo_tagList"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          ></el-option>
-        </el-select>
-      </el-form-item>
+
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -128,17 +127,17 @@ const data = reactive({
   },
   rules: {
     algoId: [
-      { required: true, message: "算法ID不能为空", trigger: "change" }
+      { required: true, message: "程序ID不能为空", trigger: "blur" }
     ],
     tagId: [
-      { required: true, message: "标签ID不能为空", trigger: "change" }
+      { required: true, message: "标签ID不能为空", trigger: "blur" }
     ],
   }
 });
 
 const { queryParams, form, rules } = toRefs(data);
 
-/** 查询算法与标签关联列表 */
+/** 查询程序标签关联列表 */
 function getList() {
   loading.value = true;
   listAlgo_tag(queryParams.value).then(response => {
@@ -159,6 +158,10 @@ function reset() {
   form.value = {
     algoId: null,
     tagId: null,
+    createBy: null,
+    createTime: null,
+    updateBy: null,
+    updateTime: null,
   };
   proxy.resetForm("algo_tagRef");
 }
@@ -186,7 +189,7 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加算法与标签关联";
+  title.value = "添加程序标签关联";
 }
 
 /** 修改按钮操作 */
@@ -196,7 +199,7 @@ function handleUpdate(row) {
   getAlgo_tag(_algoId).then(response => {
     form.value = response.data;
     open.value = true;
-    title.value = "修改算法与标签关联";
+    title.value = "修改程序标签关联";
   });
 }
 
@@ -224,7 +227,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _algoIds = row.algoId || ids.value;
-  proxy.$modal.confirm('是否确认删除算法与标签关联编号为"' + _algoIds + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除程序标签关联编号为"' + _algoIds + '"的数据项？').then(function() {
     return delAlgo_tag(_algoIds);
   }).then(() => {
     getList();

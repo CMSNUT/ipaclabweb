@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询算法与标签关联列表
+// 查询程序标签关联列表
 export function listAlgo_tag(query) {
   return request({
     url: '/resource/algo_tag/list',
@@ -9,7 +9,7 @@ export function listAlgo_tag(query) {
   })
 }
 
-// 查询算法与标签关联详细
+// 查询程序标签关联详细
 export function getAlgo_tag(algoId) {
   return request({
     url: '/resource/algo_tag/' + algoId,
@@ -17,7 +17,7 @@ export function getAlgo_tag(algoId) {
   })
 }
 
-// 新增算法与标签关联
+// 新增程序标签关联
 export function addAlgo_tag(data) {
   return request({
     url: '/resource/algo_tag',
@@ -26,7 +26,7 @@ export function addAlgo_tag(data) {
   })
 }
 
-// 修改算法与标签关联
+// 修改程序标签关联
 export function updateAlgo_tag(data) {
   return request({
     url: '/resource/algo_tag',
@@ -35,7 +35,7 @@ export function updateAlgo_tag(data) {
   })
 }
 
-// 删除算法与标签关联
+// 删除程序标签关联
 export function delAlgo_tag(algoId) {
   return request({
     url: '/resource/algo_tag/' + algoId,

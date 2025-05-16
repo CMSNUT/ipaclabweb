@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import APIRouter, Depends, Form, Request
 from pydantic_validation_decorator import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -35,13 +36,17 @@ algo_tag_page_query: Algo_tagPageQueryModel = Depends(Algo_tagPageQueryModel.as_
 
 @algo_tagController.post('', dependencies=[Depends(CheckUserInterfaceAuth('resource:algo_tag:add'))])
 @ValidateFields(validate_model='add_algo_tag')
-@Log(title='算法与标签关联', business_type=BusinessType.INSERT)
+@Log(title='程序标签关联', business_type=BusinessType.INSERT)
 async def add_resource_algo_tag(
     request: Request,
     add_algo_tag: Algo_tagModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
 ):
+    add_algo_tag.create_by = current_user.user.user_name
+    add_algo_tag.create_time = datetime.now()
+    add_algo_tag.update_by = current_user.user.user_name
+    add_algo_tag.update_time = datetime.now()
     add_algo_tag_result = await Algo_tagService.add_algo_tag_services(query_db, add_algo_tag)
     logger.info(add_algo_tag_result.message)
 
@@ -50,7 +55,7 @@ async def add_resource_algo_tag(
 
 @algo_tagController.put('', dependencies=[Depends(CheckUserInterfaceAuth('resource:algo_tag:edit'))])
 @ValidateFields(validate_model='edit_algo_tag')
-@Log(title='算法与标签关联', business_type=BusinessType.UPDATE)
+@Log(title='程序标签关联', business_type=BusinessType.UPDATE)
 async def edit_resource_algo_tag(
     request: Request,
     edit_algo_tag: Algo_tagModel,
@@ -66,7 +71,7 @@ async def edit_resource_algo_tag(
 
 
 @algo_tagController.delete('/{algo_ids}', dependencies=[Depends(CheckUserInterfaceAuth('resource:algo_tag:remove'))])
-@Log(title='算法与标签关联', business_type=BusinessType.DELETE)
+@Log(title='程序标签关联', business_type=BusinessType.DELETE)
 async def delete_resource_algo_tag(request: Request, algo_ids: str, query_db: AsyncSession = Depends(get_db)):
     delete_algo_tag = DeleteAlgo_tagModel(algoIds=algo_ids)
     delete_algo_tag_result = await Algo_tagService.delete_algo_tag_services(query_db, delete_algo_tag)
@@ -86,7 +91,7 @@ async def query_detail_resource_algo_tag(request: Request, algo_id: int, query_d
 
 
 @algo_tagController.post('/export', dependencies=[Depends(CheckUserInterfaceAuth('resource:algo_tag:export'))])
-@Log(title='算法与标签关联', business_type=BusinessType.EXPORT)
+@Log(title='程序标签关联', business_type=BusinessType.EXPORT)
 async def export_resource_algo_tag_list(
     request: Request,
     algo_tag_page_query: Algo_tagPageQueryModel = Form(),

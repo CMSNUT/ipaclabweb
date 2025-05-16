@@ -13,10 +13,10 @@ class DeviceDao:
     @classmethod
     async def get_device_detail_by_id(cls, db: AsyncSession, device_id: int):
         """
-        根据仪器id获取仪器管理详细信息
+        根据仪器ID获取仪器管理详细信息
 
         :param db: orm对象
-        :param device_id: 仪器id
+        :param device_id: 仪器ID
         :return: 仪器管理信息对象
         """
         device_info = (

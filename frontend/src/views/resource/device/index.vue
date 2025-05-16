@@ -60,7 +60,7 @@
 
     <el-table v-loading="loading" :data="deviceList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="仪器id" align="center" prop="deviceId" />
+      <el-table-column label="仪器ID" align="center" prop="deviceId" />
       <el-table-column label="仪器名称" align="center" prop="deviceName" />
       <el-table-column label="仪器图片" align="center" prop="deviceImg" width="100">
         <template #default="scope">
@@ -89,8 +89,8 @@
       <el-form-item v-if="renderField(true, true)" label="仪器名称" prop="deviceName">
         <el-input v-model="form.deviceName" placeholder="请输入仪器名称" />
       </el-form-item>
-      <el-form-item v-if="renderField(true, true)" label="上传图片" prop="deviceImg">
-        <image-upload v-model="form.deviceImg" :limit="1"/>
+      <el-form-item v-if="renderField(true, true)" label="仪器图片" prop="deviceImg">
+        <image-upload v-model="form.deviceImg" limit="1"/>
       </el-form-item>
 
       </el-form>
