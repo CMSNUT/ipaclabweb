@@ -48,7 +48,6 @@
 <script setup>
 import { getToken } from "@/utils/auth";
 import { isExternal } from "@/utils/validate";
-import axios from 'axios'; // 引入 axios
 
 const props = defineProps({
   modelValue: [String, Object, Array],
@@ -164,39 +163,14 @@ function handleUploadSuccess(res, file) {
 }
 
 // 删除图片
-// function handleDelete(file) {
-//   const findex = fileList.value.map(f => f.name).indexOf(file.name);
-//   if (findex > -1 && uploadList.value.length === number.value) {
-//     fileList.value.splice(findex, 1);
-//     emit("update:modelValue", listToString(fileList.value));
-//     return false;
-//   }
-// }
-
-// 删除图片
-async function handleDelete(file) {
-  
+function handleDelete(file) {
   const findex = fileList.value.map(f => f.name).indexOf(file.name);
-  const fileName = file.name.replace(baseUrl, '').replace('/profile/', '');
-  console.log(fileName)
-  if (findex > -1) {
-    try {
-      // 发起删除请求
-      await axios.delete(`${baseUrl}/common/delete`, {
-        params: { fileName: fileName },
-        headers: headers.value
-      });
-      fileList.value.splice(findex, 1);
-      emit("update:modelValue", listToString(fileList.value));
-      proxy.$modal.msgSuccess('删除成功');
-      return false;
-    } catch (error) {
-      proxy.$modal.msgError('删除失败');
-    }
+  if (findex > -1 && uploadList.value.length === number.value) {
+    fileList.value.splice(findex, 1);
+    emit("update:modelValue", listToString(fileList.value));
+    return false;
   }
 }
-
-
 
 // 上传结束处理
 function uploadedSuccessfully() {

@@ -41,7 +41,6 @@
 
 <script setup>
 import { getToken } from "@/utils/auth";
-import axios from 'axios'; // 引入 axios
 
 const props = defineProps({
   modelValue: [String, Object, Array],
@@ -78,7 +77,6 @@ const number = ref(0);
 const uploadList = ref([]);
 const baseUrl = import.meta.env.VITE_APP_BASE_API;
 const uploadFileUrl = ref(import.meta.env.VITE_APP_BASE_API + "/common/upload"); // 上传文件服务器地址
-
 const headers = ref({ Authorization: "Bearer " + getToken() });
 const fileList = ref([]);
 const showTip = computed(
@@ -159,25 +157,9 @@ function handleUploadSuccess(res, file) {
 }
 
 // 删除文件
-// function handleDelete(index) {
-//   fileList.value.splice(index, 1);
-//   emit("update:modelValue", listToString(fileList.value));
-// }
-
-async function handleDelete(index) {
-  const file = fileList.value[index];
-  try {
-    // 发起删除请求
-    await axios.delete(`${baseUrl}/common/delete`, {
-      params: { fileName: file.name.replace(baseUrl, '') },
-      headers: headers.value
-    });
-    fileList.value.splice(index, 1);
-    emit("update:modelValue", listToString(fileList.value));
-    proxy.$modal.msgSuccess('删除成功');
-  } catch (error) {
-    proxy.$modal.msgError('删除失败');
-  }
+function handleDelete(index) {
+  fileList.value.splice(index, 1);
+  emit("update:modelValue", listToString(fileList.value));
 }
 
 // 上传结束处理

@@ -131,16 +131,16 @@ class AlgoService:
             'updateBy': '更新者',
             'updateTime': '更新时间',
         }
-        sys_program_lang_list = await DictDataService.query_dict_data_list_from_cache_services(
-            request.app.state.redis, dict_type='sys_program_lang'
-        )
-        sys_program_lang_option = [dict(label=item.get('dictLabel'), value=item.get('dictValue')) for item in sys_program_lang_list]
-        sys_program_lang_option_dict = {item.get('value'): item for item in sys_program_lang_option}
         sys_program_type_list = await DictDataService.query_dict_data_list_from_cache_services(
             request.app.state.redis, dict_type='sys_program_type'
         )
         sys_program_type_option = [dict(label=item.get('dictLabel'), value=item.get('dictValue')) for item in sys_program_type_list]
         sys_program_type_option_dict = {item.get('value'): item for item in sys_program_type_option}
+        sys_program_lang_list = await DictDataService.query_dict_data_list_from_cache_services(
+            request.app.state.redis, dict_type='sys_program_lang'
+        )
+        sys_program_lang_option = [dict(label=item.get('dictLabel'), value=item.get('dictValue')) for item in sys_program_lang_list]
+        sys_program_lang_option_dict = {item.get('value'): item for item in sys_program_lang_option}
         for item in algo_list:
             if str(item.get('algoType')) in sys_program_type_option_dict.keys():
                 item['algoType'] = sys_program_type_option_dict.get(str(item.get('algoType'))).get('label')

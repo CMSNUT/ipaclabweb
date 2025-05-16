@@ -80,41 +80,23 @@
 
     <el-table v-loading="loading" :data="algoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <!-- <el-table-column label="程序ID" align="center" prop="algoId" /> -->
+      <el-table-column label="程序ID" align="center" prop="algoId" />
       <el-table-column label="程序名称" align="center" prop="algoName" />
-
+      <el-table-column label="程序介绍" align="center" prop="algoDesc" />
       <el-table-column label="程序类型" align="center" prop="algoType">
         <template #default="scope">
             <dict-tag :options="sys_program_type" :value="scope.row.algoType"/>
         </template>
       </el-table-column>
-
       <el-table-column label="编程语言" align="center" prop="algoLang">
         <template #default="scope">
             <dict-tag :options="sys_program_lang" :value="scope.row.algoLang"/>
         </template>
       </el-table-column>
-
-      <el-table-column label="程序介绍" align="center" prop="algoDesc" />
-
-      <!-- 标签显示 -->
-      <!-- <el-table-column label="标签">
-        <template #default="scope">
-          <el-tag
-            :key="tag.tag_id"
-            :type="tag.type || 'info'"
-            v-for="tag in getAlgoTags(scope.row.id)"
-          >{{ tag.tag_label }}</el-tag>
-        </template>
-      </el-table-column> -->
-
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['resource:algo:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['resource:algo:remove']">删除</el-button>
-
-          <el-button size="mini" @click="editTags(scope.row)">编辑标签</el-button>
-
         </template>
       </el-table-column>
     </el-table>
@@ -127,38 +109,15 @@
       @pagination="getList"
     />
 
-    <!-- 编辑标签对话框 -->
-    <!-- <el-dialog :visible.sync="dialogVisible" title="编辑标签" append-to-body>
-      <el-form :model="currentAlgo">
-        <el-form-item label="选择标签">
-          <el-select
-            v-model="currentAlgo.tagIds"
-            multiple
-            collapse-tags
-            placeholder="请选择标签"
-          >
-            <el-option
-              v-for="tag in allTags"
-              :key="tag.tag_id"
-              :label="tag.tag_label"
-              :value="tag.tag_id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="saveTags">保存</el-button>
-      </template>
-    </el-dialog> -->
-
     <!-- 添加或修改程序管理对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="algoRef" :model="form" :rules="rules" label-width="80px">
       <el-form-item v-if="renderField(true, true)" label="程序名称" prop="algoName">
         <el-input v-model="form.algoName" placeholder="请输入程序名称" />
       </el-form-item>
-      
+      <el-form-item v-if="renderField(true, true)" label="程序介绍" prop="algoDesc">
+        <editor v-model="form.algoDesc" :min-height="192"/>
+      </el-form-item>
       <el-form-item v-if="renderField(true, true)" label="程序类型" prop="algoType">
         <el-select v-model="form.algoType" placeholder="请选择程序类型">
           <el-option
@@ -177,69 +136,7 @@
             :label="dict.label"
             :value="dict.value"
           ></el-option>
-        </el-select>       
-      </el-form-item>
-
-      <el-form-item label="选择标签" prop="tagIds">
-        <div class="flex flex-col gap-2">
-          <!-- 标签选择器 -->
-          <el-select
-            v-model="form.tagIds"
-            multiple
-            filterable
-            remote
-            reserve-keyword
-            placeholder="请选择或搜索标签"
-            :remote-method="remoteMethod"
-            :loading="selectLoading"
-            @remove-tag="handleRemoveTag"
-            @clear="handleClearTags"
-          >
-            <el-option
-              v-for="item in filteredTags"
-              :key="item.id"
-              :label="item.label"
-              :value="item.id"
-            />
-          </el-select>
-          
-          <!-- 已选标签展示 -->
-          <div class="flex flex-wrap gap-2 mt-2">
-            <el-tag
-              v-for="tagId in form.tagIds"
-              :key="tagId"
-              :type="getTagType(tagId)"
-              closable
-              @close="removeTag(tagId)"
-            >
-              {{ getTagLabel(tagId) || '未知标签' }}
-            </el-tag>
-          </div>
-          
-          <!-- 新建标签 -->
-          <div class="flex items-center gap-2">
-            <el-input
-              v-model="newTagName"
-              placeholder="输入新标签名称并回车创建"
-              @keyup.enter="createTag"
-              clearable
-              size="small"
-              style="max-width: 200px"
-            />
-            <el-button 
-              type="primary" 
-              size="small" 
-              @click="createTag"
-              :loading="creatingTag"
-            >
-              <el-icon><Plus /></el-icon>创建标签
-            </el-button>
-          </div>
-        </div>
-      </el-form-item>
-
-      <el-form-item v-if="renderField(true, true)" label="程序介绍" prop="algoDesc">
-        <editor v-model="form.algoDesc" :min-height="192"/>
+        </el-select>
       </el-form-item>
 
       </el-form>
@@ -256,11 +153,8 @@
 <script setup name="Algo">
 import { listAlgo, getAlgo, delAlgo, addAlgo, updateAlgo } from "@/api/resource/algo";
 
-
-
-
 const { proxy } = getCurrentInstance();
-const { sys_program_lang, sys_program_type } = proxy.useDict('sys_program_lang', 'sys_program_type');
+const { sys_program_type, sys_program_lang } = proxy.useDict('sys_program_type', 'sys_program_lang');
 
 const algoList = ref([]);
 const open = ref(false);
@@ -281,7 +175,6 @@ const data = reactive({
     algoDesc: null,
     algoType: null,
     algoLang: null,
-    tagIds: [],
   },
   rules: {
     algoName: [
@@ -293,9 +186,6 @@ const data = reactive({
     algoLang: [
       { required: true, message: "编程语言不能为空", trigger: "change" }
     ],
-    tagIds: [
-    { type: 'array', required: true, message: '标签不能为空', trigger: 'change' }
-  ]
   }
 });
 

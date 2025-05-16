@@ -5,7 +5,7 @@ from config.env import UploadConfig
 from exceptions.exception import ServiceException
 from module_admin.entity.vo.common_vo import CrudResponseModel, UploadResponseModel
 from utils.upload_util import UploadUtil
-from utils.log_util import logger  # 确保导入了 logger
+
 
 class CommonService:
     """
@@ -50,26 +50,16 @@ class CommonService:
     
 
     @classmethod
-    async def delete_service(cls, filename):
-
-        # 打印接收到的文件名，用于调试
-        logger.info(f"接收到的文件名: {filename}")
-
-        # 构建完整文件路径
-        file_path = os.path.join(UploadConfig.UPLOAD_PATH, filename)
-        
-        # 打印完整路径，用于调试
-        logger.info(f"构建的文件路径: {file_path}")
-
+    async def delete_service(file_name):
+        upload_path = 'vf_admin/upload_path'  # 从配置中获取上传路径
+        file_path = os.path.join(upload_path, file_name)
         if UploadUtil.check_file_exists(file_path):
             try:
                 UploadUtil.delete_file(file_path)
-                logger.info(f"文件删除成功: {file_path}")
                 return True
             except Exception as e:
-                logger.info(f'删除文件时出错: {e}')
+                logger.error(f'删除文件时出错: {e}')
                 return False
-        logger.warning(f"文件不存在: {file_path}")
         return False
 
     @classmethod

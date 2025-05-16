@@ -20,10 +20,10 @@ async def common_delete(request: Request, file_name: str = Query(alias='fileName
     delete_result = await CommonService.delete_service(file_name)
     if delete_result:
         logger.info('删除成功')
-        return ResponseUtil.success(model_content='删除成功')
+        return ResponseUtil.success(message='删除成功')
     else:
         logger.info('删除失败')
-        return ResponseUtil.error(model_content='删除失败')
+        return ResponseUtil.error(message='删除失败')
 
 
 @commonController.get('/download')

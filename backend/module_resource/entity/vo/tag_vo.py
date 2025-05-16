@@ -15,26 +15,19 @@ class TagModel(BaseModel):
     model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
 
     tag_id: Optional[int] = Field(default=None, description='标签id')
-    tag_label: Optional[str] = Field(default=None, description='标签名称')
-    tag_value: Optional[str] = Field(default=None, description='标签值')
-    parent_id: Optional[int] = Field(default=None, description='父标签id')
+    tag_name: Optional[str] = Field(default=None, description='标签名称')
     create_by: Optional[str] = Field(default=None, description='创建者')
     create_time: Optional[datetime] = Field(default=None, description='创建时间')
     update_by: Optional[str] = Field(default=None, description='更新者')
     update_time: Optional[datetime] = Field(default=None, description='更新时间')
 
-    @NotBlank(field_name='tag_label', message='标签名称不能为空')
-    def get_tag_label(self):
-        return self.tag_label
-
-    @NotBlank(field_name='tag_value', message='标签值不能为空')
-    def get_tag_value(self):
-        return self.tag_value
+    @NotBlank(field_name='tag_name', message='标签名称不能为空')
+    def get_tag_name(self):
+        return self.tag_name
 
 
     def validate_fields(self):
-        self.get_tag_label()
-        self.get_tag_value()
+        self.get_tag_name()
 
 
 

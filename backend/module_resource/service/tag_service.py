@@ -120,9 +120,7 @@ class TagService:
         # 创建一个映射字典，将英文键映射到中文键
         mapping_dict = {
             'tagId': '标签id',
-            'tagLabel': '标签名称',
-            'tagValue': '标签值',
-            'parentId': '父标签id',
+            'tagName': '标签名称',
             'createBy': '创建者',
             'createTime': '创建时间',
             'updateBy': '更新者',

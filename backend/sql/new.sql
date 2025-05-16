@@ -3,9 +3,7 @@
 -- ----------------------------
 create table res_tag (
   tag_id           int(6)          not null auto_increment    comment '标签id',
-  tag_label         varchar(20)    unique not null             comment '标签名称',
-  tag_value         varchar(20)    unique not null             comment '标签值',
-  parent_id        int(6)          default null               comment '父标签id',
+  tag_name         varchar(20)    unique not null             comment '标签名称',
   create_by     varchar(15)     default ''                 comment '创建者',
   create_time   datetime                                   comment '创建时间',
   update_by     varchar(15)     default ''			       comment '更新者',

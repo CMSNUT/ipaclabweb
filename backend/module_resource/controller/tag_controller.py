@@ -24,13 +24,14 @@ tagController = APIRouter(prefix='/resource/tag', dependencies=[Depends(LoginSer
 )
 async def get_resource_tag_list(
     request: Request,
-tag_query: TagPageQueryModel = Depends(TagPageQueryModel.as_query),
+tag_page_query: TagPageQueryModel = Depends(TagPageQueryModel.as_query),
     query_db: AsyncSession = Depends(get_db),
 ):
-    tag_query_result = await TagService.get_tag_list_services(query_db, tag_query)
+    # 获取分页数据
+    tag_page_query_result = await TagService.get_tag_list_services(query_db, tag_page_query, is_page=True)
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=tag_query_result)
+    return ResponseUtil.success(model_content=tag_page_query_result)
 
 
 @tagController.post('', dependencies=[Depends(CheckUserInterfaceAuth('resource:tag:add'))])

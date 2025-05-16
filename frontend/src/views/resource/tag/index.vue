@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="标签名称" prop="tagLabel">
+      <el-form-item label="标签名称" prop="tagName">
         <el-input
-          v-model="queryParams.tagLabel"
+          v-model="queryParams.tagName"
           placeholder="请输入标签名称"
           clearable
           style="width: 240px"
@@ -28,58 +28,63 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="info"
+          type="success"
           plain
-          icon="Sort"
-          @click="toggleExpandAll"
-        >展开/折叠</el-button>
+          icon="Edit"
+          :disabled="single"
+          @click="handleUpdate"
+          v-hasPermi="['resource:tag:edit']"
+        >修改</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="Delete"
+          :disabled="multiple"
+          @click="handleDelete"
+          v-hasPermi="['resource:tag:remove']"
+        >删除</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="Download"
+          @click="handleExport"
+          v-hasPermi="['resource:tag:export']"
+        >导出</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table
-      v-if="refreshTable"
-      v-loading="loading"
-      :data="tagList"
-      row-key="tagId"
-      :default-expand-all="isExpandAll"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-    >
-      <el-table-column label="标签名称" align="center" prop="tagLabel" />
-      <el-table-column label="标签值" align="center" prop="tagValue" />
-      <el-table-column label="父标签" align="center" prop="parentId" >
-        <template #default="scope">
-          <span>{{ getParentTagLabel(scope.row.parentId) || 'null' }}</span>
-        </template>
-      </el-table-column>
+    <el-table v-loading="loading" :data="tagList" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="标签id" align="center" prop="tagId" />
+      <el-table-column label="标签名称" align="center" prop="tagName" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['resource:tag:edit']">修改</el-button>
-          <el-button link type="primary" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['${moduleName}:${businessName}:add']">新增</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['resource:tag:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
+    <pagination
+      v-show="total>0"
+      :total="total"
+      v-model:page="queryParams.pageNum"
+      v-model:limit="queryParams.pageSize"
+      @pagination="getList"
+    />
+
     <!-- 添加或修改标签管理对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="tagRef" :model="form" :rules="rules" label-width="80px">
-      <el-form-item v-if="renderField(true, true)" label="标签名称" prop="tagLabel">
-        <el-input v-model="form.tagLabel" placeholder="请输入标签名称" />
+      <el-form-item v-if="renderField(true, true)" label="标签名称" prop="tagName">
+        <el-input v-model="form.tagName" placeholder="请输入标签名称" />
       </el-form-item>
-      <el-form-item v-if="renderField(true, true)" label="标签值" prop="tagValue">
-        <el-input v-model="form.tagValue" placeholder="请输入标签值" />
-      </el-form-item>
-      <el-form-item v-if="renderField(true, true)" label="父标签id" prop="parentId">
-        <el-tree-select
-          v-model="form.parentId"
-          :data="tagOptions"
-          :props="{ value: 'tagId', label: 'tagLabel', children: 'children' }"
-          value-key="tagId"
-          placeholder="请选择父标签id"
-          check-strictly
-        />
-      </el-form-item>
+
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -97,27 +102,25 @@ import { listTag, getTag, delTag, addTag, updateTag } from "@/api/resource/tag";
 const { proxy } = getCurrentInstance();
 
 const tagList = ref([]);
-const tagOptions = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
+const ids = ref([]);
+const single = ref(true);
+const multiple = ref(true);
+const total = ref(0);
 const title = ref("");
-const isExpandAll = ref(true);
-const refreshTable = ref(true);
-// 标签ID到名称的映射表
-const tagMap = ref(new Map());
 
 const data = reactive({
   form: {},
   queryParams: {
-    tagLabel: null,
+    pageNum: 1,
+    pageSize: 10,
+    tagName: null,
   },
   rules: {
-    tagLabel: [
+    tagName: [
       { required: true, message: "标签名称不能为空", trigger: "blur" }
-    ],
-    tagValue: [
-      { required: true, message: "标签值不能为空", trigger: "blur" }
     ],
   }
 });
@@ -128,28 +131,9 @@ const { queryParams, form, rules } = toRefs(data);
 function getList() {
   loading.value = true;
   listTag(queryParams.value).then(response => {
-    tagList.value = proxy.handleTree(response.data, "tagId", "parentId");
-    // 建立ID到名称的映射，提高查找效率
-    tagMap.value = new Map(
-      response.data.map(tag => [tag.tagId, tag.tagLabel])
-    );
+    tagList.value = response.rows;
+    total.value = response.total;
     loading.value = false;
-  });
-}
-
-/** 获取父标签的名称 */
-const getParentTagLabel = (parentId) => {
-  if (!parentId) return ''; // 顶级标签
-  return tagMap.value.get(parentId) || '未知标签' ;
-}
-
-/** 查询标签管理下拉树结构 */
-function getTreeselect() {
-  listTag().then(response => {
-    tagOptions.value = [];
-    const data = { tagId: 0, tagLabel: '顶级节点', children: [] };
-    data.children = proxy.handleTree(response.data, "tagId", "parentId");
-    tagOptions.value.push(data);
   });
 }
 
@@ -163,9 +147,7 @@ function cancel() {
 function reset() {
   form.value = {
     tagId: null,
-    tagLabel: null,
-    tagValue: null,
-    parentId: null,
+    tagName: null,
     createBy: null,
     createTime: null,
     updateBy: null,
@@ -176,6 +158,7 @@ function reset() {
 
 /** 搜索按钮操作 */
 function handleQuery() {
+  queryParams.value.pageNum = 1;
   getList();
 }
 
@@ -185,36 +168,25 @@ function resetQuery() {
   handleQuery();
 }
 
-/** 新增按钮操作 */
-function handleAdd(row) {
-  reset();
-  getTreeselect();
-  if (row != null && row.tagId) {
-    form.value.parentId = row.tagId;
-  } else {
-    form.value.parentId = 0;
-  }
-  open.value = true;
-  title.value = "添加标签管理";
+/** 多选框选中数据  */
+function handleSelectionChange(selection) {
+  ids.value = selection.map(item => item.tagId);
+  single.value = selection.length != 1;
+  multiple.value = !selection.length;
 }
 
-/** 展开/折叠操作 */
-function toggleExpandAll() {
-  refreshTable.value = false;
-  isExpandAll.value = !isExpandAll.value;
-  nextTick(() => {
-    refreshTable.value = true;
-  });
+/** 新增按钮操作 */
+function handleAdd() {
+  reset();
+  open.value = true;
+  title.value = "添加标签管理";
 }
 
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  getTreeselect();
-  if (row != null) {
-    form.value.parentId = row.parentId;
-  }
-  getTag(row.tagId).then(response => {
+  const _tagId = row.tagId || ids.value;
+  getTag(_tagId).then(response => {
     form.value = response.data;
     open.value = true;
     title.value = "修改标签管理";
@@ -244,12 +216,21 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  proxy.$modal.confirm('是否确认删除标签管理编号为"' + row.tagId + '"的数据项？').then(function() {
-    return delTag(row.tagId);
+  const _tagIds = row.tagId || ids.value;
+  proxy.$modal.confirm('是否确认删除标签管理编号为"' + _tagIds + '"的数据项？').then(function() {
+    return delTag(_tagIds);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
   }).catch(() => {});
+}
+
+
+/** 导出按钮操作 */
+function handleExport() {
+  proxy.download('resource/tag/export', {
+    ...queryParams.value
+  }, `tag_${new Date().getTime()}.xlsx`);
 }
 
 /** 是否渲染字段 */

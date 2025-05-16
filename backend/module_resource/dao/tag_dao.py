@@ -69,7 +69,7 @@ class TagDao:
         query = (
             select(ResTag)
             .where(
-                ResTag.tag_label.like(f'%{query_object.tag_label}%') if query_object.tag_label else True,
+                ResTag.tag_name.like(f'%{query_object.tag_name}%') if query_object.tag_name else True,
             )
             .order_by(ResTag.tag_id)
             .distinct()
