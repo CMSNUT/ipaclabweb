@@ -151,7 +151,7 @@
             ref="editorRef" 
             v-model="form.algoDesc" 
             :height="editorHeight" 
-            class="editor-container responsive-editor"
+            class="editor-container"
           />
         </el-form-item>
       </el-form>
@@ -193,12 +193,6 @@ const editorRef = ref(null);
 const editorHeight = computed(() => {
   // 计算编辑框高度：对话框高度减去其他元素占用的高度
   return Math.max(150, dialogHeight.value - 220); // 220是其他元素的估计高度
-});
-
-// 编辑框宽度计算 - 确保始终跟随对话框宽度
-const editorWidth = computed(() => {
-  // 获取对话框主体宽度减去内边距
-  return dialogWidth.value - 40; // 40是对话框内边距的估计值
 });
 
 // 缩放处理函数
@@ -259,21 +253,8 @@ function updateEditorSize() {
     if (editorRef.value) {
       // 强制更新编辑框高度和宽度
       editorRef.value.$el.style.height = `${editorHeight.value}px`;
-      editorRef.value.$el.style.width = `${editorWidth.value}px`;
-      
-      // 查找编辑框内部的内容区域并设置宽度
-      const contentArea = editorRef.value.$el.querySelector('.ql-editor') || editorRef.value.$el.querySelector('.editor-content');
-      if (contentArea) {
-        contentArea.style.width = '100%';
-        contentArea.style.maxWidth = 'none';
-      }
-      
-      // 确保编辑器容器没有固定宽度限制
-      const editorContainer = editorRef.value.$el;
-      if (editorContainer) {
-        editorContainer.style.maxWidth = 'none';
-        editorContainer.style.width = '100%';
-      }
+      // 移除宽度限制，让编辑框使用容器的全部宽度
+      editorRef.value.$el.style.width = '100%';
     }
   });
 }
@@ -287,9 +268,6 @@ function onDialogOpen() {
       dialogWidth.value = dialog.offsetWidth;
       dialogHeight.value = dialog.offsetHeight;
       updateEditorSize();
-      
-      // 添加对话框尺寸变化的观察器
-      observeDialogSize(dialog);
     }
   });
 }
@@ -306,39 +284,12 @@ function onDialogResize() {
   });
 }
 
-// 对话框尺寸变化观察器
-let resizeObserver = null;
-function observeDialogSize(element) {
-  // 清除之前的观察器
-  if (resizeObserver) {
-    resizeObserver.disconnect();
-  }
-  
-  // 创建新的观察器
-  resizeObserver = new ResizeObserver(entries => {
-    for (let entry of entries) {
-      dialogWidth.value = entry.contentRect.width;
-      dialogHeight.value = entry.contentRect.height;
-      updateEditorSize();
-    }
-  });
-  
-  // 开始观察
-  resizeObserver.observe(element);
-}
-
 // 生命周期钩子
 onUnmounted(() => {
   document.removeEventListener('mousemove', handleResize);
   document.removeEventListener('mouseup', stopResize);
   document.removeEventListener('mousemove', handleResizeWidth);
   document.removeEventListener('mouseup', stopResizeWidth);
-  
-  // 断开观察器连接
-  if (resizeObserver) {
-    resizeObserver.disconnect();
-    resizeObserver = null;
-  }
 });
 
 // 监听对话框高度变化，实时更新编辑框大小
@@ -551,13 +502,6 @@ getList();
   height: 100%;
   min-height: 150px;
   box-sizing: border-box;
-}
-
-/* 确保编辑框响应式 */
-.responsive-editor, .responsive-editor * {
-  box-sizing: border-box;
-  max-width: 100% !important;
-  width: 100% !important;
 }
 
 /* 表单布局优化 */
