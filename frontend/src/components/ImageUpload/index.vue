@@ -175,10 +175,9 @@ function handleUploadSuccess(res, file) {
 
 // 删除图片
 async function handleDelete(file) {
-  
   const findex = fileList.value.map(f => f.name).indexOf(file.name);
   const fileName = file.name.replace(baseUrl, '').replace('/profile/', '');
-  console.log(fileName)
+  // console.log(fileName)
   if (findex > -1) {
     try {
       // 发起删除请求
@@ -195,8 +194,6 @@ async function handleDelete(file) {
     }
   }
 }
-
-
 
 // 上传结束处理
 function uploadedSuccessfully() {
