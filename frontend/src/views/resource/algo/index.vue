@@ -1,168 +1,126 @@
 <template>
   <div class="app-container">
+    <!-- 搜索表单 -->
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+      <!-- 程序名称输入框 -->
       <el-form-item label="程序名称" prop="algoName">
-        <el-input
-          v-model="queryParams.algoName"
-          placeholder="请输入程序名称"
-          clearable
-          style="width: 240px"
-          @keyup.enter="handleQuery"
-        />
+        <el-input v-model="queryParams.algoName" placeholder="请输入程序名称" clearable style="width: 240px"
+          @keyup.enter="handleQuery" />
       </el-form-item>
+      <!-- 程序类型选择框 -->
       <el-form-item label="程序类型" prop="algoType">
         <el-select v-model="queryParams.algoType" placeholder="请选择程序类型" clearable style="width: 240px">
-          <el-option
-            v-for="dict in sys_program_type"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+          <el-option v-for="dict in sys_program_type" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
+      <!-- 编程语言选择框 -->
       <el-form-item label="编程语言" prop="algoLang">
         <el-select v-model="queryParams.algoLang" placeholder="请选择编程语言" clearable style="width: 240px">
-          <el-option
-            v-for="dict in sys_program_lang"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+          <el-option v-for="dict in sys_program_lang" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
+      <!-- 搜索和重置按钮 -->
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
+    <!-- 操作按钮 -->
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          @click="handleAdd"
-          v-hasPermi="['resource:algo:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['resource:algo:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="Edit"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['resource:algo:edit']"
-        >修改</el-button>
+        <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['resource:algo:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="Delete"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['resource:algo:remove']"
-        >删除</el-button>
+        <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['resource:algo:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="Download"
-          @click="handleExport"
-          v-hasPermi="['resource:algo:export']"
-        >导出</el-button>
+        <el-button type="warning" plain icon="Download" @click="handleExport"
+          v-hasPermi="['resource:algo:export']">导出</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
+    <!-- 表格展示 -->
     <el-table v-loading="loading" :data="algoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="程序ID" align="center" prop="algoId" />
       <el-table-column label="程序名称" align="center" prop="algoName" />
-      <el-table-column label="程序介绍" align="center" prop="algoDesc" />
       <el-table-column label="程序类型" align="center" prop="algoType">
         <template #default="scope">
-            <dict-tag :options="sys_program_type" :value="scope.row.algoType"/>
+          <dict-tag :options="sys_program_type" :value="scope.row.algoType" />
         </template>
       </el-table-column>
       <el-table-column label="编程语言" align="center" prop="algoLang">
         <template #default="scope">
-            <dict-tag :options="sys_program_lang" :value="scope.row.algoLang"/>
+          <dict-tag :options="sys_program_lang" :value="scope.row.algoLang" />
         </template>
       </el-table-column>
+
+      <el-table-column label="程序介绍" align="center" prop="algoDesc">
+        <!-- <template #default="scope">
+          <dict-tag :options="sys_program_type" :value="scope.row.algoDesc" />
+        </template> -->
+      </el-table-column>
+
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['resource:algo:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['resource:algo:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['resource:algo:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['resource:algo:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      v-model:page="queryParams.pageNum"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <!-- 分页组件 -->
+    <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改程序管理对话框 -->
-    <el-dialog 
-      :title="title" 
-      v-model="open" 
-      :width="dialogWidth + 'px'" 
-      :draggable="true" 
-      append-to-body
-      @open="onDialogOpen"
-      @resize="onDialogResize"
-      class="resizable-dialog"
-    >
+    <el-dialog :title="title" v-model="open" :width="dialogWidth + 'px'" :draggable="true" append-to-body
+      @open="onDialogOpen" @resize="onDialogResize" class="resizable-dialog">
       <el-form ref="algoRef" :model="form" :rules="rules" label-width="80px" class="dialog-form">
+        <!-- 程序名称输入框 -->
         <el-form-item v-if="renderField(true, true)" label="程序名称" prop="algoName">
           <el-input v-model="form.algoName" placeholder="请输入程序名称" />
         </el-form-item>
+        <!-- 程序类型选择框 -->
         <el-form-item v-if="renderField(true, true)" label="程序类型" prop="algoType">
           <el-select v-model="form.algoType" placeholder="请选择程序类型">
-            <el-option
-              v-for="dict in sys_program_type"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
+            <el-option v-for="dict in sys_program_type" :key="dict.value" :label="dict.label"
+              :value="dict.value"></el-option>
           </el-select>
         </el-form-item>
+        <!-- 编程语言选择框 -->
         <el-form-item v-if="renderField(true, true)" label="编程语言" prop="algoLang">
           <el-select v-model="form.algoLang" placeholder="请选择编程语言">
-            <el-option
-              v-for="dict in sys_program_lang"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
+            <el-option v-for="dict in sys_program_lang" :key="dict.value" :label="dict.label"
+              :value="dict.value"></el-option>
           </el-select>
         </el-form-item>
 
-        <!-- 改进：添加响应式富文本编辑框 -->
+        <!-- 程序介绍富文本编辑框 -->
         <el-form-item v-if="renderField(true, true)" label="程序介绍" prop="algoDesc">
-          <editor 
-            ref="editorRef" 
-            v-model="form.algoDesc" 
-            :height="editorHeight" 
-            class="editor-container responsive-editor"
-          />
+          <wangeditor :editor="editorRef" v-model="form.algoDesc" :height="editorHeight" 
+            class="editor-container responsive-editor" />
         </el-form-item>
+
       </el-form>
-      
+
+      <!-- 对话框底部按钮 -->
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="submitForm">确 定</el-button>
           <el-button @click="cancel">取 消</el-button>
         </div>
       </template>
-      
+
       <!-- 缩放手柄 -->
       <div class="resize-handle" @mousedown="startResize"></div>
       <div class="resize-handle-right" @mousedown="startResizeWidth"></div>
@@ -173,9 +131,10 @@
 <script setup name="Algo">
 import { listAlgo, getAlgo, delAlgo, addAlgo, updateAlgo } from "@/api/resource/algo";
 import { ref, computed, onUnmounted, getCurrentInstance, nextTick, watch } from 'vue';
+import wangeditor from '@/components/WangEditor/index.vue';
 
 // 对话框尺寸管理
-const dialogWidth = ref(500);
+const dialogWidth = ref(800);
 const dialogHeight = ref(400);
 const MIN_DIALOG_WIDTH = 400;
 const MIN_DIALOG_HEIGHT = 350;
@@ -208,7 +167,7 @@ function startResize(event) {
   initialY.value = event.clientY;
   initialWidth.value = dialogWidth.value;
   initialHeight.value = dialogHeight.value;
-  
+
   document.addEventListener('mousemove', handleResize);
   document.addEventListener('mouseup', stopResize);
 }
@@ -217,24 +176,24 @@ function startResizeWidth(event) {
   isResizingWidth.value = true;
   initialX.value = event.clientX;
   initialWidth.value = dialogWidth.value;
-  
+
   document.addEventListener('mousemove', handleResizeWidth);
   document.addEventListener('mouseup', stopResizeWidth);
 }
 
 function handleResize(event) {
   if (!isResizing.value) return;
-  
+
   const dx = event.clientX - initialX.value;
   const dy = event.clientY - initialY.value;
-  
+
   dialogWidth.value = Math.max(MIN_DIALOG_WIDTH, initialWidth.value + dx);
   dialogHeight.value = Math.max(MIN_DIALOG_HEIGHT, initialHeight.value + dy);
 }
 
 function handleResizeWidth(event) {
   if (!isResizingWidth.value) return;
-  
+
   const dx = event.clientX - initialX.value;
   dialogWidth.value = Math.max(MIN_DIALOG_WIDTH, initialWidth.value + dx);
 }
@@ -260,14 +219,14 @@ function updateEditorSize() {
       // 强制更新编辑框高度和宽度
       editorRef.value.$el.style.height = `${editorHeight.value}px`;
       editorRef.value.$el.style.width = `${editorWidth.value}px`;
-      
+
       // 查找编辑框内部的内容区域并设置宽度
       const contentArea = editorRef.value.$el.querySelector('.ql-editor') || editorRef.value.$el.querySelector('.editor-content');
       if (contentArea) {
         contentArea.style.width = '100%';
         contentArea.style.maxWidth = 'none';
       }
-      
+
       // 确保编辑器容器没有固定宽度限制
       const editorContainer = editorRef.value.$el;
       if (editorContainer) {
@@ -287,7 +246,7 @@ function onDialogOpen() {
       dialogWidth.value = dialog.offsetWidth;
       dialogHeight.value = dialog.offsetHeight;
       updateEditorSize();
-      
+
       // 添加对话框尺寸变化的观察器
       observeDialogSize(dialog);
     }
@@ -313,7 +272,7 @@ function observeDialogSize(element) {
   if (resizeObserver) {
     resizeObserver.disconnect();
   }
-  
+
   // 创建新的观察器
   resizeObserver = new ResizeObserver(entries => {
     for (let entry of entries) {
@@ -322,7 +281,7 @@ function observeDialogSize(element) {
       updateEditorSize();
     }
   });
-  
+
   // 开始观察
   resizeObserver.observe(element);
 }
@@ -333,7 +292,7 @@ onUnmounted(() => {
   document.removeEventListener('mouseup', stopResize);
   document.removeEventListener('mousemove', handleResizeWidth);
   document.removeEventListener('mouseup', stopResizeWidth);
-  
+
   // 断开观察器连接
   if (resizeObserver) {
     resizeObserver.disconnect();
@@ -482,12 +441,12 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _algoIds = row.algoId || ids.value;
-  proxy.$modal.confirm('是否确认删除程序管理编号为"' + _algoIds + '"的数据项？').then(function() {
+  proxy.$modal.confirm('是否确认删除程序管理编号为"' + _algoIds + '"的数据项？').then(function () {
     return delAlgo(_algoIds);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
-  }).catch(() => {});
+  }).catch(() => { });
 }
 
 /** 导出按钮操作 */
@@ -547,14 +506,16 @@ getList();
 
 /* 编辑框容器样式 */
 .editor-container {
-  width: 100%; /* 确保容器宽度占满父容器 */
+  width: 100%;
+  /* 确保容器宽度占满父容器 */
   height: 100%;
   min-height: 150px;
   box-sizing: border-box;
 }
 
 /* 确保编辑框响应式 */
-.responsive-editor, .responsive-editor * {
+.responsive-editor,
+.responsive-editor * {
   box-sizing: border-box;
   max-width: 100% !important;
   width: 100% !important;

@@ -36,6 +36,12 @@ conda create -n ipac-env python=3.9 -y
 conda activate ipac-env
 pip install -r xxx\\requirements.txt
 ```
+
+## 安装wangEditor
+```bash
+npm install @wangeditor/editor @wangeditor/editor-for-vue@next --save
+```
+
 # 增加模块
 ## 生成代码
 - 在前端 `代码生成` 菜单项，点击`创建`，然后将建表代码复制到对话框中
