@@ -62,11 +62,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="程序介绍" align="center" prop="algoDesc">
+      <!-- <el-table-column label="程序介绍" align="center" prop="algoDesc"> -->
         <!-- <template #default="scope">
           <dict-tag :options="sys_program_type" :value="scope.row.algoDesc" />
         </template> -->
-      </el-table-column>
+      <!-- </el-table-column> -->
 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
@@ -104,13 +104,11 @@
               :value="dict.value"></el-option>
           </el-select>
         </el-form-item>
-
         <!-- 程序介绍富文本编辑框 -->
         <el-form-item v-if="renderField(true, true)" label="程序介绍" prop="algoDesc">
           <wangeditor :editor="editorRef" v-model="form.algoDesc" :height="editorHeight" 
             class="editor-container responsive-editor" />
         </el-form-item>
-
       </el-form>
 
       <!-- 对话框底部按钮 -->

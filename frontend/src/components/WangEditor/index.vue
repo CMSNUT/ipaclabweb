@@ -112,8 +112,9 @@ const editorConfig = {
   placeholder: '请输入内容...', // 配置默认提示
   MENU_CONF: {                // 配置上传服务器地址
     uploadImage: {
-      base64LimitSize: 5 * 1024 * 1024, // 5M
+      base64LimitSize: 1 * 1024 * 1024, // 1M
       allowedFileTypes: ['image/*'],
+      maxFileCount: 25, // 最多允许上传10张图片
     }
   }
 }
