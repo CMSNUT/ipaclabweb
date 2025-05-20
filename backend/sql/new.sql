@@ -57,3 +57,4 @@ CREATE TABLE res_algo_tag (
   FOREIGN KEY (algo_id) REFERENCES res_algo(algo_id),
   FOREIGN KEY (tag_id) REFERENCES res_tag(tag_id)
 )engine=innodb comment = '程序标签关联表';
+

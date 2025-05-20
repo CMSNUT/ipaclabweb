@@ -90,7 +90,12 @@
     <!-- 添加或修改程序标签关联对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="algo_tagRef" :model="form" :rules="rules" label-width="80px">
-
+        <el-form-item label="程序ID" prop="algoId">
+          <el-input v-model="form.algoId" placeholder="请输入程序ID" />
+        </el-form-item>
+        <el-form-item label="标签ID" prop="tagId">
+          <el-input v-model="form.tagId" placeholder="请输入标签ID" />
+        </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
