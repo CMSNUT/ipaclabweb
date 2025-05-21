@@ -474,11 +474,21 @@ class LoginService:
         :param session_id: 会话编号
         :return: 退出登录结果
         """
-        await request.app.state.redis.delete(f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{session_id}')
-        # await request.app.state.redis.delete(f'{current_user.user.user_id}_access_token')
-        # await request.app.state.redis.delete(f'{current_user.user.user_id}_session_id')
+        # await request.app.state.redis.delete(f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{session_id}')
+        # # await request.app.state.redis.delete(f'{current_user.user.user_id}_access_token')
+        # # await request.app.state.redis.delete(f'{current_user.user.user_id}_session_id')
 
-        return True
+        # return True
+        max_retries = 3
+        for attempt in range(max_retries):
+          try:
+            await request.app.state.redis.delete(f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{session_id}')
+            break
+          except ConnectionError as e:
+            if attempt < max_retries - 1:
+                await asyncio.sleep(1)  # 指数退避更好
+                continue
+            raise e  # 或记录日志后忽略
 
 
 class RouterUtil:

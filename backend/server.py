@@ -27,11 +27,11 @@ from sub_applications.handle import handle_sub_applications
 from utils.common_util import worship
 from utils.log_util import logger
 
-from module_resource.controller.tag_controller import tagController
-from module_resource.controller.device_controller import deviceController
 
-from module_resource.controller.algo_controller import algoController
-from module_resource.controller.algo_tag_controller  import algo_tagController
+# from module_resource.controller.device_controller import deviceController
+
+# from module_resource.controller.algo_controller import algoController
+# from module_resource.controller.algo_tag_controller  import algo_tagController
 
 # 生命周期事件
 @asynccontextmanager
@@ -85,11 +85,10 @@ controller_list = [
     {'router': commonController, 'tags': ['通用模块']},
     {'router': genController, 'tags': ['代码生成']},
 
-    {'router': tagController, 'tags': ['系统管理-标签管理']},
-    {'router': deviceController, 'tags': ['资源管理-仪器管理']},
+    # {'router': deviceController, 'tags': ['资源管理-仪器管理']},
     
-    {'router': algoController, 'tags': ['资源管理-算法管理']},
-    {'router': algo_tagController, 'tags': ['资源管理-算法标签']},
+    # {'router': algoController, 'tags': ['资源管理-算法管理']},
+    # {'router': algo_tagController, 'tags': ['资源管理-算法标签']},
 ]
 
 for controller in controller_list:

@@ -13,7 +13,7 @@
               <userAvatar />
             </div>
             <ul class="list-group list-group-striped">
-              <li class="list-group-item">
+              <li class="list-group-item" >
                 <svg-icon icon-class="user" />
                 {{ state?.parentDeptName + ' ' + state.user.dept?.deptName }}
                 <div class="pull-right">{{ state.user.nickName + ' (' + state.user.userName + ')' }}</div>
@@ -69,8 +69,6 @@ import userAvatar from "./userAvatar";
 import userInfo from "./userInfo";
 import resetPwd from "./resetPwd";
 import { getUserProfile } from "@/api/system/user";
-import { getDept } from "@/api/system/dept";
-
 
 const activeTab = ref("userinfo");
 const state = reactive({
@@ -92,7 +90,7 @@ function getUser() {
       getDept(state.user.dept.parentId).then(response => {
         state.parentDeptName = response.data.deptName;
         // response.data;
-        // console.log(state.parentDeptName)
+        console.log(state.parentDeptName)
       });
     }
   });

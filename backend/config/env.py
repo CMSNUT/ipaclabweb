@@ -78,9 +78,11 @@ class GenSettings:
     """
 
     author = 'adimin'
-    package_name = 'module_admin.system'
+    # package_name = 'module_admin.system'
+    package_name = 'module_lab'
     auto_remove_pre = False
-    table_prefix = 'sys_'
+    # table_prefix = 'sys_'
+    table_prefix = 'lab_'
     allow_overwrite = False
 
     GEN_PATH = 'vf_admin/gen_path'

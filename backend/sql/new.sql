@@ -1,20 +1,20 @@
 -- ----------------------------
 -- 1、标签表
 -- ----------------------------
-create table res_tag (
-  tag_id           int(6)          not null auto_increment    comment '标签id',
-  tag_name         varchar(20)    unique not null             comment '标签名称',
-  create_by     varchar(15)     default ''                 comment '创建者',
-  create_time   datetime                                   comment '创建时间',
-  update_by     varchar(15)     default ''			       comment '更新者',
-  update_time   datetime                                   comment '更新时间',
-  primary key (tag_id)
-) engine=innodb auto_increment=1 comment = '标签表';
+-- create table lab_tag (
+--   tag_id           int(6)          not null auto_increment    comment '标签id',
+--   tag_name         varchar(20)    unique not null             comment '标签名称',
+--   create_by     varchar(15)     default ''                 comment '创建者',
+--   create_time   datetime                                   comment '创建时间',
+--   update_by     varchar(15)     default ''			       comment '更新者',
+--   update_time   datetime                                   comment '更新时间',
+--   primary key (tag_id)
+-- ) engine=innodb auto_increment=1 comment = '标签表';
 
 -- ----------------------------
 -- 2、仪器表
 -- ----------------------------
-create table res_device
+create table lab_device
 (
   device_id       int(6)      not null auto_increment    comment '仪器ID',
   device_name     varchar(64) unique not null            comment '仪器名称',
@@ -29,7 +29,7 @@ create table res_device
 -- ----------------------------
 -- 3、程序表
 -- ----------------------------
-create table res_algo
+create table lab_algo
 (
   algo_id       int(6)      not null auto_increment    comment '程序ID',
   algo_name     varchar(64) unique not null            comment '程序名称',
@@ -46,7 +46,7 @@ create table res_algo
 -- ----------------------------
 -- 4、程序标签表
 -- ----------------------------
-CREATE TABLE res_algo_tag (
+CREATE TABLE lab_algo_tag (
   algo_id int(6)      not null comment '程序ID',
   tag_id int(6)      not null comment '标签ID',
   create_by     varchar(15)     default ''                 comment '创建者',
@@ -54,7 +54,5 @@ CREATE TABLE res_algo_tag (
   update_by     varchar(15)     default ''			       comment '更新者',
   update_time   datetime                                   comment '更新时间',
   PRIMARY KEY (algo_id, tag_id),
-  FOREIGN KEY (algo_id) REFERENCES res_algo(algo_id),
-  FOREIGN KEY (tag_id) REFERENCES res_tag(tag_id)
 )engine=innodb comment = '程序标签关联表';
 
